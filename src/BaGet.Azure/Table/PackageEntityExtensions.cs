@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using BaGet.Core;
@@ -12,7 +12,7 @@ namespace BaGet.Azure
         {
             return new Package
             {
-                Id = entity.Id,
+                Id = entity.Identifier,
                 NormalizedVersionString = entity.NormalizedVersion,
                 OriginalVersionString = entity.OriginalVersion,
 
