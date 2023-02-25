@@ -6,21 +6,21 @@ using System.Threading.Tasks;
 using BaGet.Core;
 using BaGet.Protocol.Models;
 using Microsoft.Azure.Cosmos.Table;
+using Microsoft.Extensions.Options;
 
 namespace BaGet.Azure
 {
     public class TableSearchService : ISearchService
     {
-        private const string TableName = "Packages";
-
         private readonly CloudTable _table;
         private readonly ISearchResponseBuilder _responseBuilder;
 
         public TableSearchService(
             CloudTableClient client,
-            ISearchResponseBuilder responseBuilder)
+            ISearchResponseBuilder responseBuilder,
+            IOptionsSnapshot<AzureTableOptions> options)
         {
-            _table = client?.GetTableReference(TableName) ?? throw new ArgumentNullException(nameof(client));
+            _table = client?.GetTableReference(options.Value.TableName) ?? throw new ArgumentNullException(nameof(client));
             _responseBuilder = responseBuilder ?? throw new ArgumentNullException(nameof(responseBuilder));
         }
 
