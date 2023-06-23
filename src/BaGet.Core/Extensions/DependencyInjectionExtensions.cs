@@ -24,8 +24,6 @@ namespace BaGet.Core
 
             configureAction(app);
 
-            services.AddFallbackServices();
-
             return services;
         }
 
@@ -95,7 +93,6 @@ namespace BaGet.Core
             services.TryAddTransient<ISymbolIndexingService, SymbolIndexingService>();
             services.TryAddTransient<ISymbolStorageService, SymbolStorageService>();
 
-            services.TryAddTransient<DatabaseSearchService>();
             services.TryAddTransient<FileStorageService>();
             services.TryAddTransient<PackageService>();
             services.TryAddSingleton<NullStorageService>();
@@ -131,30 +128,6 @@ namespace BaGet.Core
 
                 return null;
             });
-        }
-
-        private static void AddFallbackServices(this IServiceCollection services)
-        {
-            services.TryAddScoped<IContext, NullContext>();
-
-            // BaGet's services have multiple implementations that live side-by-side.
-            // The application will choose the implementation using one of two ways:
-            //
-            // 1. Using the first implementation that was registered in the dependency injection
-            //    container. This is the strategy used by applications that embed BaGet.
-            // 2. Using "providers". The providers will examine the application's configuration to
-            //    determine whether its service implementation is active. Thsi is the strategy used
-            //    by the default BaGet application.
-            //
-            // BaGet has database and search services, but the database services are special
-            // in that they may also act as search services. If an application registers the
-            // database service first and the search service second, the application should
-            // use the search service even though it wasn't registered first. Furthermore,
-            // if an application registers a database service without a search service, the
-            // database service should be used for search. This effect is achieved by deferring
-            // the database search service's registration until the very end.
-            services.TryAddTransient<ISearchIndexer>(provider => provider.GetRequiredService<NullSearchIndexer>());
-            services.TryAddTransient<ISearchService>(provider => provider.GetRequiredService<DatabaseSearchService>());
         }
 
         private static HttpClient HttpClientFactory(IServiceProvider provider)
