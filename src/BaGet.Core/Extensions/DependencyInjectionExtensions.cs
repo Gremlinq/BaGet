@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 
 namespace BaGet.Core
 {
-    public static partial class DependencyInjectionExtensions
+    public static class DependencyInjectionExtensions
     {
         public static IServiceCollection AddBaGetApplication(
             this IServiceCollection services,
