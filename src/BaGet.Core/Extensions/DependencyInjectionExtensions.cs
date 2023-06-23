@@ -101,13 +101,9 @@ namespace BaGet.Core
             services.TryAddTransient<DatabaseSearchService>();
             services.TryAddTransient<FileStorageService>();
             services.TryAddTransient<PackageService>();
-            services.TryAddTransient<V2UpstreamClient>();
-            services.TryAddTransient<V3UpstreamClient>();
-            services.TryAddTransient<DisabledUpstreamClient>();
+            services.TryAddTransient<IUpstreamClient, DisabledUpstreamClient>();
             services.TryAddSingleton<NullStorageService>();
             services.TryAddTransient<PackageDatabase>();
-
-            services.TryAddTransient(UpstreamClientFactory);
         }
 
         private static void AddDefaultProviders(this IServiceCollection services)
@@ -193,27 +189,6 @@ namespace BaGet.Core
             return new NuGetClientFactory(
                 httpClient,
                 options.Value.PackageSource.ToString());
-        }
-
-        private static IUpstreamClient UpstreamClientFactory(IServiceProvider provider)
-        {
-            var options = provider.GetRequiredService<IOptionsSnapshot<MirrorOptions>>();
-
-            // TODO: Convert to switch expression.
-            if (!options.Value.Enabled)
-            {
-                return provider.GetRequiredService<DisabledUpstreamClient>();
-            }
-
-            else if (options.Value.Legacy)
-            {
-                return provider.GetRequiredService<V2UpstreamClient>();
-            }
-
-            else
-            {
-                return provider.GetRequiredService<V3UpstreamClient>();
-            }
         }
     }
 }
