@@ -1,4 +1,3 @@
-using System;
 using BaGet.Azure;
 using BaGet.Core;
 using Microsoft.Azure.Cosmos.Table;
@@ -6,26 +5,24 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using Microsoft.WindowsAzure.Storage.Blob;
+using CloudStorageAccount = Microsoft.WindowsAzure.Storage.CloudStorageAccount;
+using StorageCredentials = Microsoft.WindowsAzure.Storage.Auth.StorageCredentials;
+using TableStorageAccount = Microsoft.Azure.Cosmos.Table.CloudStorageAccount;
 
 namespace BaGet
 {
-    using CloudStorageAccount = Microsoft.WindowsAzure.Storage.CloudStorageAccount;
-    using StorageCredentials = Microsoft.WindowsAzure.Storage.Auth.StorageCredentials;
-
-    using TableStorageAccount = Microsoft.Azure.Cosmos.Table.CloudStorageAccount;
-
     public static class AzureApplicationExtensions
     {
         public static BaGetApplication AddAzureTableDatabase(this BaGetApplication app)
         {
             app.Services.AddBaGetOptions<AzureTableOptions>("Database");
 
-            app.Services.AddTransient<TablePackageDatabase>();
+            app.Services.AddTransient<IPackageDatabase, TablePackageDatabase>();
             app.Services.AddTransient<TableOperationBuilder>();
-            app.Services.AddTransient<TableSearchService>();
+            app.Services.AddTransient<ISearchService, TableSearchService>();
             app.Services.TryAddTransient<IPackageDatabase>(provider => provider.GetRequiredService<TablePackageDatabase>());
             app.Services.TryAddTransient<ISearchService>(provider => provider.GetRequiredService<TableSearchService>());
-            app.Services.TryAddTransient<ISearchIndexer>(provider => provider.GetRequiredService<NullSearchIndexer>());
+            app.Services.TryAddTransient<ISearchIndexer, NullSearchIndexer>();
 
             app.Services.AddSingleton(provider =>
             {
@@ -41,30 +38,6 @@ namespace BaGet
                 return account.CreateCloudTableClient();
             });
 
-            app.Services.AddProvider<IPackageDatabase>((provider, config) =>
-            {
-                return provider.GetRequiredService<TablePackageDatabase>();
-            });
-
-            app.Services.AddProvider<ISearchService>((provider, config) =>
-            {
-                return provider.GetRequiredService<TableSearchService>();
-            });
-
-            app.Services.AddProvider<ISearchIndexer>((provider, config) =>
-            {
-                return provider.GetRequiredService<NullSearchIndexer>();
-            });
-
-            return app;
-        }
-
-        public static BaGetApplication AddAzureTableDatabase(
-            this BaGetApplication app,
-            Action<AzureTableOptions> configure)
-        {
-            app.AddAzureTableDatabase();
-            app.Services.Configure(configure);
             return app;
         }
 
@@ -107,15 +80,6 @@ namespace BaGet
                 return provider.GetRequiredService<BlobStorageService>();
             });
 
-            return app;
-        }
-
-        public static BaGetApplication AddAzureBlobStorage(
-            this BaGetApplication app,
-            Action<AzureBlobStorageOptions> configure)
-        {
-            app.AddAzureBlobStorage();
-            app.Services.Configure(configure);
             return app;
         }
     }

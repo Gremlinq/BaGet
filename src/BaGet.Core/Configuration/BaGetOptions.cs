@@ -25,7 +25,5 @@ namespace BaGet.Core
         public bool IsReadOnlyMode { get; set; } = false;
 
         public StorageOptions Storage { get; set; }
-
-        public MirrorOptions Mirror { get; set; }
     }
 }

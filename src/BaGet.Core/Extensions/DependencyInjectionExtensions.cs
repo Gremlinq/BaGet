@@ -1,7 +1,4 @@
 using System;
-using System.Net;
-using System.Net.Http;
-using System.Reflection;
 using BaGet.Protocol;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -61,7 +58,6 @@ namespace BaGet.Core
         {
             services.AddBaGetOptions<BaGetOptions>();
             services.AddBaGetOptions<FileSystemStorageOptions>(nameof(BaGetOptions.Storage));
-            services.AddBaGetOptions<MirrorOptions>(nameof(BaGetOptions.Mirror));
             services.AddBaGetOptions<StorageOptions>(nameof(BaGetOptions.Storage));
         }
 
@@ -76,9 +72,6 @@ namespace BaGet.Core
             services.TryAddSingleton<RegistrationBuilder>();
             services.TryAddSingleton<SystemTime>();
             services.TryAddSingleton<ValidateStartupOptions>();
-
-            services.TryAddSingleton(HttpClientFactory);
-            services.TryAddSingleton(NuGetClientFactoryFactory);
 
             services.TryAddTransient<IAuthenticationService, ApiKeyAuthenticationService>();
             services.TryAddTransient<IPackageContentService, DefaultPackageContentService>();
@@ -112,35 +105,6 @@ namespace BaGet.Core
 
                 return null;
             });
-        }
-
-        private static HttpClient HttpClientFactory(IServiceProvider provider)
-        {
-            var options = provider.GetRequiredService<IOptions<MirrorOptions>>().Value;
-
-            var assembly = Assembly.GetEntryAssembly();
-            var assemblyName = assembly.GetName().Name;
-            var assemblyVersion = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion ?? "0.0.0";
-
-            var client = new HttpClient(new HttpClientHandler
-            {
-                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
-            });
-
-            client.DefaultRequestHeaders.Add("User-Agent", $"{assemblyName}/{assemblyVersion}");
-            client.Timeout = TimeSpan.FromSeconds(options.PackageDownloadTimeoutSeconds);
-
-            return client;
-        }
-
-        private static NuGetClientFactory NuGetClientFactoryFactory(IServiceProvider provider)
-        {
-            var httpClient = provider.GetRequiredService<HttpClient>();
-            var options = provider.GetRequiredService<IOptions<MirrorOptions>>();
-
-            return new NuGetClientFactory(
-                httpClient,
-                options.Value.PackageSource.ToString());
         }
     }
 }
