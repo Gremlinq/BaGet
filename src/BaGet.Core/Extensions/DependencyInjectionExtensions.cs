@@ -72,7 +72,6 @@ namespace BaGet.Core
         private static void AddBaGetServices(this IServiceCollection services)
         {
             services.TryAddSingleton<IFrameworkCompatibilityService, FrameworkCompatibilityService>();
-            services.TryAddSingleton<IPackageDownloadsSource, PackageDownloadsJsonSource>();
 
             services.TryAddSingleton<ISearchResponseBuilder, SearchResponseBuilder>();
             services.TryAddSingleton<NuGetClient>();
