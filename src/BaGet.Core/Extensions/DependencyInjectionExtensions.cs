@@ -101,7 +101,6 @@ namespace BaGet.Core
             services.TryAddTransient<DatabaseSearchService>();
             services.TryAddTransient<FileStorageService>();
             services.TryAddTransient<PackageService>();
-            services.TryAddTransient<IUpstreamClient, DisabledUpstreamClient>();
             services.TryAddSingleton<NullStorageService>();
             services.TryAddTransient<PackageDatabase>();
         }
