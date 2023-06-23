@@ -16,10 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\BaGet\BaGet.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Update="TestData\TestData.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

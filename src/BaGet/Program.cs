@@ -28,22 +28,6 @@ namespace BaGet
 
             app.HelpOption(inherited: true);
 
-            app.Command("import", import =>
-            {
-                import.Command("downloads", downloads =>
-                {
-                    downloads.OnExecuteAsync(async cancellationToken =>
-                    {
-                        using (var scope = host.Services.CreateScope())
-                        {
-                            var importer = scope.ServiceProvider.GetRequiredService<DownloadsImporter>();
-
-                            await importer.ImportAsync(cancellationToken);
-                        }
-                    });
-                });
-            });
-
             app.Option("--urls", "The URLs that BaGet should bind to.", CommandOptionType.SingleValue);
 
             app.OnExecuteAsync(async cancellationToken =>
