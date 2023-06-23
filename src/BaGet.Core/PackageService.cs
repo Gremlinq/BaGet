@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 using NuGet.Versioning;
 
 namespace BaGet.Core
@@ -11,17 +10,10 @@ namespace BaGet.Core
     public class PackageService : IPackageService
     {
         private readonly IPackageDatabase _db;
-        private readonly IPackageIndexingService _indexer;
-        private readonly ILogger<PackageService> _logger;
 
-        public PackageService(
-            IPackageDatabase db,
-            IPackageIndexingService indexer,
-            ILogger<PackageService> logger)
+        public PackageService(IPackageDatabase db)
         {
             _db = db ?? throw new ArgumentNullException(nameof(db));
-            _indexer = indexer ?? throw new ArgumentNullException(nameof(indexer));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task<IReadOnlyList<NuGetVersion>> FindPackageVersionsAsync(
