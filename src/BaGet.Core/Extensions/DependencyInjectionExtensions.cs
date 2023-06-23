@@ -60,7 +60,6 @@ namespace BaGet.Core
         private static void AddConfiguration(this IServiceCollection services)
         {
             services.AddBaGetOptions<BaGetOptions>();
-            services.AddBaGetOptions<DatabaseOptions>(nameof(BaGetOptions.Database));
             services.AddBaGetOptions<FileSystemStorageOptions>(nameof(BaGetOptions.Storage));
             services.AddBaGetOptions<MirrorOptions>(nameof(BaGetOptions.Mirror));
             services.AddBaGetOptions<SearchOptions>(nameof(BaGetOptions.Search));

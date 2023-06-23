@@ -18,7 +18,7 @@ namespace BaGet
     {
         public static BaGetApplication AddAzureTableDatabase(this BaGetApplication app)
         {
-            app.Services.AddBaGetOptions<AzureTableOptions>(nameof(BaGetOptions.Database));
+            app.Services.AddBaGetOptions<AzureTableOptions>("Database");
 
             app.Services.AddTransient<TablePackageDatabase>();
             app.Services.AddTransient<TableOperationBuilder>();
@@ -43,15 +43,12 @@ namespace BaGet
 
             app.Services.AddProvider<IPackageDatabase>((provider, config) =>
             {
-                if (!config.HasDatabaseType("AzureTable")) return null;
-
                 return provider.GetRequiredService<TablePackageDatabase>();
             });
 
             app.Services.AddProvider<ISearchService>((provider, config) =>
             {
                 if (!config.HasSearchType("Database")) return null;
-                if (!config.HasDatabaseType("AzureTable")) return null;
 
                 return provider.GetRequiredService<TableSearchService>();
             });
@@ -59,7 +56,6 @@ namespace BaGet
             app.Services.AddProvider<ISearchIndexer>((provider, config) =>
             {
                 if (!config.HasSearchType("Database")) return null;
-                if (!config.HasDatabaseType("AzureTable")) return null;
 
                 return provider.GetRequiredService<NullSearchIndexer>();
             });
