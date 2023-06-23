@@ -43,8 +43,8 @@ namespace BaGet
 
         public static BaGetApplication AddAzureBlobStorage(this BaGetApplication app)
         {
-            app.Services.AddBaGetOptions<AzureBlobStorageOptions>(nameof(BaGetOptions.Storage));
-            app.Services.AddTransient<BlobStorageService>();
+            app.Services.AddBaGetOptions<AzureBlobStorageOptions>("Storage");
+            app.Services.AddTransient<IStorageService, BlobStorageService>();
             app.Services.TryAddTransient<IStorageService>(provider => provider.GetRequiredService<BlobStorageService>());
 
             app.Services.AddSingleton(provider =>
@@ -71,13 +71,6 @@ namespace BaGet
                 var client = account.CreateCloudBlobClient();
 
                 return client.GetContainerReference(options.Container);
-            });
-
-            app.Services.AddProvider<IStorageService>((provider, config) =>
-            {
-                if (!config.HasStorageType("AzureBlobStorage")) return null;
-
-                return provider.GetRequiredService<BlobStorageService>();
             });
 
             return app;

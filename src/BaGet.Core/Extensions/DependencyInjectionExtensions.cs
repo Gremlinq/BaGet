@@ -17,7 +17,6 @@ namespace BaGet.Core
 
             services.AddConfiguration();
             services.AddBaGetServices();
-            services.AddDefaultProviders();
 
             configureAction(app);
 
@@ -57,8 +56,6 @@ namespace BaGet.Core
         private static void AddConfiguration(this IServiceCollection services)
         {
             services.AddBaGetOptions<BaGetOptions>();
-            services.AddBaGetOptions<FileSystemStorageOptions>(nameof(BaGetOptions.Storage));
-            services.AddBaGetOptions<StorageOptions>(nameof(BaGetOptions.Storage));
         }
 
         private static void AddBaGetServices(this IServiceCollection services)
@@ -84,27 +81,7 @@ namespace BaGet.Core
             services.TryAddTransient<ISymbolIndexingService, SymbolIndexingService>();
             services.TryAddTransient<ISymbolStorageService, SymbolStorageService>();
 
-            services.TryAddTransient<FileStorageService>();
-            services.TryAddTransient<PackageService>();
-            services.TryAddSingleton<NullStorageService>();
-        }
-
-        private static void AddDefaultProviders(this IServiceCollection services)
-        {
-            services.AddProvider<IStorageService>((provider, configuration) =>
-            {
-                if (configuration.HasStorageType("filesystem"))
-                {
-                    return provider.GetRequiredService<FileStorageService>();
-                }
-
-                if (configuration.HasStorageType("null"))
-                {
-                    return provider.GetRequiredService<NullStorageService>();
-                }
-
-                return null;
-            });
+            services.TryAddSingleton<IStorageService, NullStorageService>();
         }
     }
 }

@@ -23,7 +23,5 @@ namespace BaGet.Core
         /// If true, disables package pushing, deleting, and re-listing.
         /// </summary>
         public bool IsReadOnlyMode { get; set; } = false;
-
-        public StorageOptions Storage { get; set; }
     }
 }

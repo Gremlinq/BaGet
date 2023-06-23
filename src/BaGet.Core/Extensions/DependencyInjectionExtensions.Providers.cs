@@ -6,8 +6,6 @@ namespace BaGet.Core
 {
     public static partial class DependencyInjectionExtensions
     {
-        private static readonly string StorageTypeKey = $"{nameof(BaGetOptions.Storage)}:{nameof(StorageOptions.Type)}";
-
         /// <summary>
         /// Add a new provider to the dependency injection container. The provider may
         /// provide an implementation of the service, or it may return null.
@@ -24,17 +22,6 @@ namespace BaGet.Core
             services.AddSingleton<IProvider<TService>>(new DelegateProvider<TService>(func));
 
             return services;
-        }
-
-        /// <summary>
-        /// Determine whether a storage type is currently active.
-        /// </summary>
-        /// <param name="config">The application's configuration.</param>
-        /// <param name="value">The storage type that should be checked.</param>
-        /// <returns>Whether the database type is active.</returns>
-        public static bool HasStorageType(this IConfiguration config, string value)
-        {
-            return config[StorageTypeKey].Equals(value, StringComparison.OrdinalIgnoreCase);
         }
     }
 }
