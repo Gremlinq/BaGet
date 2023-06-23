@@ -17,6 +17,7 @@ namespace BaGet.Azure
     public class TablePackageDatabase : IPackageDatabase
     {
         private const int MaxPreconditionFailures = 5;
+        private static List<string> MinimalColumnSet => new List<string> { "PartitionKey" };
 
         private readonly TableOperationBuilder _operationBuilder;
         private readonly CloudTable _table;
@@ -196,8 +197,6 @@ namespace BaGet.Azure
                 _operationBuilder.UnlistPackage(id, version),
                 cancellationToken);
         }
-
-        private List<string> MinimalColumnSet => new List<string> { "PartitionKey" };
 
         private async Task<bool> TryUpdatePackageAsync(TableOperation operation, CancellationToken cancellationToken)
         {

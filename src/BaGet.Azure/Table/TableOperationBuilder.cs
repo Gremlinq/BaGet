@@ -56,47 +56,51 @@ namespace BaGet.Azure
 
         public TableOperation UpdateDownloads(string packageId, NuGetVersion packageVersion, long downloads)
         {
-            var entity = new PackageDownloadsEntity();
-
-            entity.PartitionKey = packageId.ToLowerInvariant();
-            entity.RowKey = packageVersion.ToNormalizedString().ToLowerInvariant();
-            entity.Downloads = downloads;
-            entity.ETag = "*";
+            var entity = new PackageDownloadsEntity
+            {
+                PartitionKey = packageId.ToLowerInvariant(),
+                RowKey = packageVersion.ToNormalizedString().ToLowerInvariant(),
+                Downloads = downloads,
+                ETag = "*"
+            };
 
             return TableOperation.Merge(entity);
         }
 
         public TableOperation HardDeletePackage(string packageId, NuGetVersion packageVersion)
         {
-            var entity = new PackageEntity();
-
-            entity.PartitionKey = packageId.ToLowerInvariant();
-            entity.RowKey = packageVersion.ToNormalizedString().ToLowerInvariant();
-            entity.ETag = "*";
+            var entity = new PackageEntity
+            {
+                PartitionKey = packageId.ToLowerInvariant(),
+                RowKey = packageVersion.ToNormalizedString().ToLowerInvariant(),
+                ETag = "*"
+            };
 
             return TableOperation.Delete(entity);
         }
 
         public TableOperation UnlistPackage(string packageId, NuGetVersion packageVersion)
         {
-            var entity = new PackageListingEntity();
-
-            entity.PartitionKey = packageId.ToLowerInvariant();
-            entity.RowKey = packageVersion.ToNormalizedString().ToLowerInvariant();
-            entity.Listed = false;
-            entity.ETag = "*";
+            var entity = new PackageListingEntity
+            {
+                PartitionKey = packageId.ToLowerInvariant(),
+                RowKey = packageVersion.ToNormalizedString().ToLowerInvariant(),
+                Listed = false,
+                ETag = "*"
+            };
 
             return TableOperation.Merge(entity);
         }
 
         public TableOperation RelistPackage(string packageId, NuGetVersion packageVersion)
         {
-            var entity = new PackageListingEntity();
-
-            entity.PartitionKey = packageId.ToLowerInvariant();
-            entity.RowKey = packageVersion.ToNormalizedString().ToLowerInvariant();
-            entity.Listed = true;
-            entity.ETag = "*";
+            var entity = new PackageListingEntity
+            {
+                PartitionKey = packageId.ToLowerInvariant(),
+                RowKey = packageVersion.ToNormalizedString().ToLowerInvariant(),
+                Listed = true,
+                ETag = "*"
+            };
 
             return TableOperation.Merge(entity);
         }

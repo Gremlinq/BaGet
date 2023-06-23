@@ -11,10 +11,6 @@ namespace BaGet.Azure
     /// </summary>
     public class PackageEntity : TableEntity, IDownloadCount, IListed
     {
-        public PackageEntity()
-        {
-        }
-
         public string Identifier { get; set; }
         public string NormalizedVersion { get; set; }
         public string OriginalVersion { get; set; }
@@ -73,10 +69,6 @@ namespace BaGet.Azure
     /// </summary>
     public class PackageListingEntity : TableEntity, IListed
     {
-        public PackageListingEntity()
-        {
-        }
-
         public bool Listed { get; set; }
     }
 
@@ -87,10 +79,6 @@ namespace BaGet.Azure
     /// </summary>
     public class PackageDownloadsEntity : TableEntity, IDownloadCount
     {
-        public PackageDownloadsEntity()
-        {
-        }
-
         public long Downloads { get; set; }
     }
 

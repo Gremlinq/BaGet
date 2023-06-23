@@ -1,10 +1,9 @@
 using System.Net;
+using StorageException = Microsoft.WindowsAzure.Storage.StorageException;
+using TableStorageException = Microsoft.Azure.Cosmos.Table.StorageException;
 
 namespace BaGet.Azure
 {
-    using StorageException = Microsoft.WindowsAzure.Storage.StorageException;
-    using TableStorageException = Microsoft.Azure.Cosmos.Table.StorageException;
-
     internal static class StorageExceptionExtensions
     {
         public static bool IsAlreadyExistsException(this StorageException e)
