@@ -59,8 +59,6 @@ namespace BaGet.Core
 
         private static void AddBaGetServices(this IServiceCollection services)
         {
-            services.TryAddSingleton<IFrameworkCompatibilityService, FrameworkCompatibilityService>();
-
             services.TryAddSingleton<ISearchResponseBuilder, SearchResponseBuilder>();
             services.TryAddSingleton<ISearchIndexer, NullSearchIndexer>();
             services.TryAddSingleton<ISearchService, NullSearchService>();
