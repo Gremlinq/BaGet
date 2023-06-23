@@ -6,7 +6,6 @@ namespace BaGet.Core
 {
     public static partial class DependencyInjectionExtensions
     {
-        private static readonly string SearchTypeKey = $"{nameof(BaGetOptions.Search)}:{nameof(SearchOptions.Type)}";
         private static readonly string StorageTypeKey = $"{nameof(BaGetOptions.Storage)}:{nameof(StorageOptions.Type)}";
 
         /// <summary>
@@ -25,17 +24,6 @@ namespace BaGet.Core
             services.AddSingleton<IProvider<TService>>(new DelegateProvider<TService>(func));
 
             return services;
-        }
-
-        /// <summary>
-        /// Determine whether a search type is currently active.
-        /// </summary>
-        /// <param name="config">The application's configuration.</param>
-        /// <param name="value">The search type that should be checked.</param>
-        /// <returns>Whether the search type is active.</returns>
-        public static bool HasSearchType(this IConfiguration config, string value)
-        {
-            return config[SearchTypeKey].Equals(value, StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>

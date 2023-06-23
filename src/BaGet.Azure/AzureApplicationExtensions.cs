@@ -48,15 +48,11 @@ namespace BaGet
 
             app.Services.AddProvider<ISearchService>((provider, config) =>
             {
-                if (!config.HasSearchType("Database")) return null;
-
                 return provider.GetRequiredService<TableSearchService>();
             });
 
             app.Services.AddProvider<ISearchIndexer>((provider, config) =>
             {
-                if (!config.HasSearchType("Database")) return null;
-
                 return provider.GetRequiredService<NullSearchIndexer>();
             });
 

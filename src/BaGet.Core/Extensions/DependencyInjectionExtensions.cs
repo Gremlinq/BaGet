@@ -62,7 +62,6 @@ namespace BaGet.Core
             services.AddBaGetOptions<BaGetOptions>();
             services.AddBaGetOptions<FileSystemStorageOptions>(nameof(BaGetOptions.Storage));
             services.AddBaGetOptions<MirrorOptions>(nameof(BaGetOptions.Mirror));
-            services.AddBaGetOptions<SearchOptions>(nameof(BaGetOptions.Search));
             services.AddBaGetOptions<StorageOptions>(nameof(BaGetOptions.Storage));
         }
 
@@ -99,20 +98,6 @@ namespace BaGet.Core
 
         private static void AddDefaultProviders(this IServiceCollection services)
         {
-            services.AddProvider((provider, configuration) =>
-            {
-                if (!configuration.HasSearchType("null")) return null;
-
-                return provider.GetRequiredService<NullSearchService>();
-            });
-
-            services.AddProvider((provider, configuration) =>
-            {
-                if (!configuration.HasSearchType("null")) return null;
-
-                return provider.GetRequiredService<NullSearchIndexer>();
-            });
-
             services.AddProvider<IStorageService>((provider, configuration) =>
             {
                 if (configuration.HasStorageType("filesystem"))

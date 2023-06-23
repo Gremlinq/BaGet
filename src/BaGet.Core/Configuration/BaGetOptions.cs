@@ -26,8 +26,6 @@ namespace BaGet.Core
 
         public StorageOptions Storage { get; set; }
 
-        public SearchOptions Search { get; set; }
-
         public MirrorOptions Mirror { get; set; }
     }
 }
