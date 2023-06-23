@@ -6,11 +6,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using NuGet.Common;
 using NuGet.Packaging;
+using NuGetPackageType = NuGet.Packaging.Core.PackageType;
 
 namespace BaGet.Core
 {
-    using NuGetPackageType = NuGet.Packaging.Core.PackageType;
-
     public static class PackageArchiveReaderExtensions
     {
         public static bool HasReadme(this PackageArchiveReader package)
@@ -19,20 +18,18 @@ namespace BaGet.Core
         public static bool HasEmbeddedIcon(this PackageArchiveReader package)
             => !string.IsNullOrEmpty(package.NuspecReader.GetIcon());
 
-        public async static Task<Stream> GetReadmeAsync(
+        public static async Task<Stream> GetReadmeAsync(
             this PackageArchiveReader package,
             CancellationToken cancellationToken)
         {
             var readmePath = package.NuspecReader.GetReadme();
-            if (readmePath == null)
-            {
-                throw new InvalidOperationException("Package does not have a readme!");
-            }
 
-            return await package.GetStreamAsync(readmePath, cancellationToken);
+            return readmePath == null
+                ? throw new InvalidOperationException("Package does not have a readme!")
+                : await package.GetStreamAsync(readmePath, cancellationToken);
         }
 
-        public async static Task<Stream> GetIconAsync(
+        public static async Task<Stream> GetIconAsync(
             this PackageArchiveReader package,
             CancellationToken cancellationToken)
         {
@@ -102,44 +99,37 @@ namespace BaGet.Core
 
         private static Uri ParseUri(string uriString)
         {
-            if (string.IsNullOrEmpty(uriString)) return null;
-
-            return new Uri(uriString);
+            return string.IsNullOrEmpty(uriString)
+                ? null
+                : new Uri(uriString);
         }
 
         private static string[] ParseAuthors(string authors)
         {
-            if (string.IsNullOrEmpty(authors)) return new string[0];
-
-            return authors.Split(new[] { ',', ';', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+            return string.IsNullOrEmpty(authors)
+                ? Array.Empty<string>()
+                : authors.Split(new[] { ',', ';', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
         }
 
         private static string[] ParseTags(string tags)
         {
-            if (string.IsNullOrEmpty(tags)) return new string[0];
-
-            return tags.Split(new[] { ',', ';', ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+            return string.IsNullOrEmpty(tags)
+                ? Array.Empty<string>()
+                : tags.Split(new[] { ',', ';', ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
         }
 
         private static (Uri repositoryUrl, string repositoryType) GetRepositoryMetadata(NuspecReader nuspec)
         {
             var repository = nuspec.GetRepositoryMetadata();
 
-            if (string.IsNullOrEmpty(repository?.Url) ||
-                !Uri.TryCreate(repository.Url, UriKind.Absolute, out var repositoryUri))
-            {
+            if (string.IsNullOrEmpty(repository?.Url) || !Uri.TryCreate(repository.Url, UriKind.Absolute, out var repositoryUri))
                 return (null, null);
-            }
 
             if (repositoryUri.Scheme != Uri.UriSchemeHttps)
-            {
                 return (null, null);
-            }
 
             if (repository.Type.Length > 100)
-            {
                 throw new InvalidOperationException("Repository type must be less than or equal 100 characters");
-            }
 
             return (repositoryUri, repository.Type);
         }
