@@ -4,9 +4,9 @@ using Microsoft.Azure.Cosmos.Table;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
-using Microsoft.WindowsAzure.Storage.Blob;
-using CloudStorageAccount = Microsoft.WindowsAzure.Storage.CloudStorageAccount;
-using StorageCredentials = Microsoft.WindowsAzure.Storage.Auth.StorageCredentials;
+using Microsoft.Azure.Storage.Blob;
+using CloudStorageAccount = Microsoft.Azure.Storage.CloudStorageAccount;
+using StorageCredentials = Microsoft.Azure.Storage.Auth.StorageCredentials;
 using TableStorageAccount = Microsoft.Azure.Cosmos.Table.CloudStorageAccount;
 
 namespace BaGet
