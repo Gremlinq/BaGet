@@ -77,7 +77,7 @@ namespace BaGet.Protocol.Models
         public string LicenseUrl { get; set; }
 
         /// <summary>
-        /// Whether the pacakge is listed.
+        /// Whether the package is listed.
         /// </summary>
         [JsonPropertyName("listed")]
         public bool? Listed { get; set; }

@@ -13,15 +13,9 @@ namespace BaGet.Core
 
         public NuGetVersion Version
         {
-            get
-            {
-                // Favor the original version string as it contains more information.
-                // Packages uploaded with older versions of BaGet may not have the original version string.
-                return NuGetVersion.Parse(
-                    OriginalVersionString != null
-                        ? OriginalVersionString
-                        : NormalizedVersionString);
-            }
+            // Favor the original version string as it contains more information.
+            // Packages uploaded with older versions of BaGet may not have the original version string.
+            get => NuGetVersion.Parse(OriginalVersionString ?? NormalizedVersionString);
 
             set
             {

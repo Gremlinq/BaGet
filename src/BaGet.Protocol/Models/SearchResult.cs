@@ -18,7 +18,7 @@ namespace BaGet.Protocol.Models
         public string PackageId { get; set; }
 
         /// <summary>
-        /// The latest version of the matched pacakge. This is the full NuGet version after normalization,
+        /// The latest version of the matched package. This is the full NuGet version after normalization,
         /// including any SemVer 2.0.0 build metadata.
         /// </summary>
         [JsonPropertyName("version")]

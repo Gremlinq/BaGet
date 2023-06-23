@@ -36,7 +36,7 @@ namespace BaGet.Core
 
             var errors = new List<string>();
             var message = (_optionsName == null)
-                ? $"Invalid configs"
+                ? "Invalid configs"
                 : $"Invalid '{_optionsName}' configs";
 
             foreach (var result in validationResults)

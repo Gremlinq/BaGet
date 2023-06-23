@@ -42,7 +42,7 @@ namespace BaGet.Core
         {
             var nuspec = packageReader.NuspecReader;
 
-            (var repositoryUri, var repositoryType) = GetRepositoryMetadata(nuspec);
+            var (repositoryUri, repositoryType) = GetRepositoryMetadata(nuspec);
 
             return new Package
             {
