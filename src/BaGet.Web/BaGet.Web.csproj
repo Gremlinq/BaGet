@@ -1,13 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
 
     <PackageTags>NuGet</PackageTags>
     <Description>BaGet's NuGet server implementation</Description>
-    <RootNamespace>BaGet.Web</RootNamespace>
-
-    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
   </PropertyGroup>
 
   <ItemGroup>

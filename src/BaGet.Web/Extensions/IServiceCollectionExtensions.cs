@@ -22,8 +22,6 @@ namespace BaGet
                     options.JsonSerializerOptions.IgnoreNullValues = true;
                 });
 
-            services.AddRazorPages();
-
             services.AddHttpContextAccessor();
             services.AddTransient<IUrlGenerator, BaGetUrlGenerator>();
 
