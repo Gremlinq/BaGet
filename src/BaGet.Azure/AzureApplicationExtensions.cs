@@ -22,7 +22,6 @@ namespace BaGet
             app.Services.AddTransient<ISearchService, TableSearchService>();
             app.Services.TryAddTransient<IPackageDatabase, TablePackageDatabase>();
             app.Services.TryAddTransient<ISearchService, TableSearchService>();
-            app.Services.TryAddTransient<ISearchIndexer, NullSearchIndexer>();
 
             app.Services.AddSingleton(provider =>
             {

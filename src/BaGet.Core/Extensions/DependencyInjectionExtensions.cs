@@ -62,8 +62,8 @@ namespace BaGet.Core
             services.TryAddSingleton<IFrameworkCompatibilityService, FrameworkCompatibilityService>();
 
             services.TryAddSingleton<ISearchResponseBuilder, SearchResponseBuilder>();
-            services.TryAddSingleton<NullSearchIndexer>();
-            services.TryAddSingleton<NullSearchService>();
+            services.TryAddSingleton<ISearchIndexer, NullSearchIndexer>();
+            services.TryAddSingleton<ISearchService, NullSearchService>();
             services.TryAddSingleton<RegistrationBuilder>();
             services.TryAddSingleton<SystemTime>();
             services.TryAddSingleton<ValidateStartupOptions>();
