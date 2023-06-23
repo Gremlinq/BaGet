@@ -2,7 +2,6 @@ using System;
 using BaGet.Azure;
 using BaGet.Core;
 using Microsoft.Azure.Cosmos.Table;
-using Microsoft.Azure.Search;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
@@ -124,59 +123,6 @@ namespace BaGet
             Action<AzureBlobStorageOptions> configure)
         {
             app.AddAzureBlobStorage();
-            app.Services.Configure(configure);
-            return app;
-        }
-
-        public static BaGetApplication AddAzureSearch(this BaGetApplication app)
-        {
-            app.Services.AddBaGetOptions<AzureSearchOptions>(nameof(BaGetOptions.Search));
-
-            app.Services.AddTransient<AzureSearchBatchIndexer>();
-            app.Services.AddTransient<AzureSearchService>();
-            app.Services.AddTransient<AzureSearchIndexer>();
-            app.Services.AddTransient<IndexActionBuilder>();
-            app.Services.TryAddTransient<ISearchService>(provider => provider.GetRequiredService<AzureSearchService>());
-            app.Services.TryAddTransient<ISearchIndexer>(provider => provider.GetRequiredService<AzureSearchIndexer>());
-
-            app.Services.AddSingleton(provider =>
-            {
-                var options = provider.GetRequiredService<IOptions<AzureSearchOptions>>().Value;
-                var credentials = new SearchCredentials(options.ApiKey);
-
-                return new SearchServiceClient(options.AccountName, credentials);
-            });
-
-            app.Services.AddSingleton(provider =>
-            {
-                var options = provider.GetRequiredService<IOptions<AzureSearchOptions>>().Value;
-                var credentials = new SearchCredentials(options.ApiKey);
-
-                return new SearchIndexClient(options.AccountName, PackageDocument.IndexName, credentials);
-            });
-
-            app.Services.AddProvider<ISearchService>((provider, config) =>
-            {
-                if (!config.HasSearchType("AzureSearch")) return null;
-
-                return provider.GetRequiredService<AzureSearchService>();
-            });
-
-            app.Services.AddProvider<ISearchIndexer>((provider, config) =>
-            {
-                if (!config.HasSearchType("AzureSearch")) return null;
-
-                return provider.GetRequiredService<AzureSearchIndexer>();
-            });
-
-            return app;
-        }
-
-        public static BaGetApplication AddAzureSearch(
-            this BaGetApplication app,
-            Action<AzureSearchOptions> configure)
-        {
-            app.AddAzureSearch();
             app.Services.Configure(configure);
             return app;
         }
