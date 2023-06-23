@@ -99,7 +99,6 @@ namespace BaGet.Core
             services.TryAddTransient<FileStorageService>();
             services.TryAddTransient<PackageService>();
             services.TryAddSingleton<NullStorageService>();
-            services.TryAddTransient<PackageDatabase>();
         }
 
         private static void AddDefaultProviders(this IServiceCollection services)
