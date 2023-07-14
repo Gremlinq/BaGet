@@ -143,7 +143,11 @@ namespace BaGet.Azure
             if (!string.IsNullOrWhiteSpace(searchText))
             {
                 // Filter to rows where the "searchText" prefix matches on the partition key.
-                var prefix = searchText.TrimEnd().Split(separator: null).Last();
+                var prefix = searchText
+                    .TrimEnd()
+                    .Split(separator: null)
+                    .Last()
+                    .ToLowerInvariant();
 
                 var prefixLower = prefix;
                 var prefixUpper = prefix + "~";
