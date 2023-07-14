@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -83,8 +83,11 @@ namespace BaGet.Azure
             CancellationToken cancellationToken)
         {
             var query = new TableQuery<PackageEntity>();
-            query = query.Where(GenerateSearchFilter(searchText, includePrerelease, includeSemVer2));
-            query.TakeCount = 500;
+
+            query = query
+                .Where(GenerateSearchFilter(searchText, includePrerelease, includeSemVer2))
+                .OrderByDesc(nameof(PackageEntity.Timestamp))
+                .Take(500);
 
             var results = await LoadPackagesAsync(query, maxPartitions: skip + take, cancellationToken);
 
