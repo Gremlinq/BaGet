@@ -137,24 +137,10 @@ namespace BaGet.Azure
             return entity.AsPackage();
         }
 
-        public async Task<bool> HardDeletePackageAsync(string id, NuGetVersion version, CancellationToken cancellationToken)
-        {
-            return await TryUpdatePackageAsync(
-                _operationBuilder.HardDeletePackage(id, version),
-                cancellationToken);
-        }
-
         public async Task<bool> RelistPackageAsync(string id, NuGetVersion version, CancellationToken cancellationToken)
         {
             return await TryUpdatePackageAsync(
                 _operationBuilder.RelistPackage(id, version),
-                cancellationToken);
-        }
-
-        public async Task<bool> UnlistPackageAsync(string id, NuGetVersion version, CancellationToken cancellationToken)
-        {
-            return await TryUpdatePackageAsync(
-                _operationBuilder.UnlistPackage(id, version),
                 cancellationToken);
         }
 

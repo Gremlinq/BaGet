@@ -54,31 +54,6 @@ namespace BaGet.Azure
             return TableOperation.Insert(entity);
         }
 
-        public TableOperation HardDeletePackage(string packageId, NuGetVersion packageVersion)
-        {
-            var entity = new PackageEntity
-            {
-                PartitionKey = packageId.ToLowerInvariant(),
-                RowKey = packageVersion.ToNormalizedString().ToLowerInvariant(),
-                ETag = "*"
-            };
-
-            return TableOperation.Delete(entity);
-        }
-
-        public TableOperation UnlistPackage(string packageId, NuGetVersion packageVersion)
-        {
-            var entity = new PackageListingEntity
-            {
-                PartitionKey = packageId.ToLowerInvariant(),
-                RowKey = packageVersion.ToNormalizedString().ToLowerInvariant(),
-                Listed = false,
-                ETag = "*"
-            };
-
-            return TableOperation.Merge(entity);
-        }
-
         public TableOperation RelistPackage(string packageId, NuGetVersion packageVersion)
         {
             var entity = new PackageListingEntity

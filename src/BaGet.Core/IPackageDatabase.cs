@@ -60,15 +60,6 @@ namespace BaGet.Core
         Task<bool> ExistsAsync(string id, NuGetVersion version, CancellationToken cancellationToken);
 
         /// <summary>
-        /// Unlist a package, making it undiscoverable.
-        /// </summary>
-        /// <param name="id">The id of the package to unlist.</param>
-        /// <param name="version">The version of the package to unlist.</param>
-        /// <param name="cancellationToken">A token to cancel the task.</param>
-        /// <returns>False if the package does not exist.</returns>
-        Task<bool> UnlistPackageAsync(string id, NuGetVersion version, CancellationToken cancellationToken);
-
-        /// <summary>
         /// Relist a package, making it discoverable.
         /// </summary>
         /// <param name="id">The id of the package to relist.</param>
@@ -76,15 +67,6 @@ namespace BaGet.Core
         /// <param name="cancellationToken">A token to cancel the task.</param>
         /// <returns>False if the package does not exist.</returns>
         Task<bool> RelistPackageAsync(string id, NuGetVersion version, CancellationToken cancellationToken);
-
-        /// <summary>
-        /// Completely remove the package from the database.
-        /// </summary>
-        /// <param name="id">The id of the package to remove.</param>
-        /// <param name="version">The version of the pacakge to remove.</param>
-        /// <param name="cancellationToken">A token to cancel the task.</param>
-        /// <returns>False if the package doesn't exist.</returns>
-        Task<bool> HardDeletePackageAsync(string id, NuGetVersion version, CancellationToken cancellationToken);
     }
 
     /// <summary>

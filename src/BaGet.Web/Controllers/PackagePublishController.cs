@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
 using BaGet.Core;
@@ -14,7 +14,6 @@ namespace BaGet.Web
         private readonly IAuthenticationService _authentication;
         private readonly IPackageIndexingService _indexer;
         private readonly IPackageDatabase _packages;
-        private readonly IPackageDeletionService _deleteService;
         private readonly IOptionsSnapshot<BaGetOptions> _options;
         private readonly ILogger<PackagePublishController> _logger;
 
@@ -22,14 +21,12 @@ namespace BaGet.Web
             IAuthenticationService authentication,
             IPackageIndexingService indexer,
             IPackageDatabase packages,
-            IPackageDeletionService deletionService,
             IOptionsSnapshot<BaGetOptions> options,
             ILogger<PackagePublishController> logger)
         {
             _authentication = authentication ?? throw new ArgumentNullException(nameof(authentication));
             _indexer = indexer ?? throw new ArgumentNullException(nameof(indexer));
             _packages = packages ?? throw new ArgumentNullException(nameof(packages));
-            _deleteService = deletionService ?? throw new ArgumentNullException(nameof(deletionService));
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
@@ -83,29 +80,7 @@ namespace BaGet.Web
         [HttpDelete]
         public async Task<IActionResult> Delete(string id, string version, CancellationToken cancellationToken)
         {
-            if (_options.Value.IsReadOnlyMode)
-            {
-                return Unauthorized();
-            }
-
-            if (!NuGetVersion.TryParse(version, out var nugetVersion))
-            {
-                return NotFound();
-            }
-
-            if (!await _authentication.AuthenticateAsync(Request.GetApiKey(), cancellationToken))
-            {
-                return Unauthorized();
-            }
-
-            if (await _deleteService.TryDeletePackageAsync(id, nugetVersion, cancellationToken))
-            {
-                return NoContent();
-            }
-            else
-            {
-                return NotFound();
-            }
+            return Unauthorized();
         }
 
         [HttpPost]

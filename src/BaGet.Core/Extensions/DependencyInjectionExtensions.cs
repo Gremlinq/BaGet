@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -68,7 +68,6 @@ namespace BaGet.Core
 
             services.TryAddTransient<IAuthenticationService, ApiKeyAuthenticationService>();
             services.TryAddTransient<IPackageContentService, DefaultPackageContentService>();
-            services.TryAddTransient<IPackageDeletionService, PackageDeletionService>();
             services.TryAddTransient<IPackageIndexingService, PackageIndexingService>();
             services.TryAddTransient<IPackageMetadataService, DefaultPackageMetadataService>();
             services.TryAddTransient<IPackageService, PackageService>();
