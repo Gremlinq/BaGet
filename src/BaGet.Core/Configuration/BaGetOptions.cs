@@ -1,4 +1,4 @@
-namespace BaGet.Core
+﻿namespace BaGet.Core
 {
     public class BaGetOptions
     {
@@ -12,12 +12,6 @@ namespace BaGet.Core
         /// How BaGet should interpret package deletion requests.
         /// </summary>
         public PackageDeletionBehavior PackageDeletionBehavior { get; set; } = PackageDeletionBehavior.Unlist;
-
-        /// <summary>
-        /// If enabled, pushing a package that already exists will replace the
-        /// existing package.
-        /// </summary>
-        public bool AllowPackageOverwrites { get; set; } = false;
 
         /// <summary>
         /// If true, disables package pushing, deleting, and re-listing.

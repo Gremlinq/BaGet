@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -81,15 +81,7 @@ namespace BaGet.Core
 
             // The package is well-formed. Ensure this is a new package.
             if (await _packages.ExistsAsync(package.Id, package.Version, cancellationToken))
-            {
-                if (!_options.Value.AllowPackageOverwrites)
-                {
-                    return PackageIndexingResult.PackageAlreadyExists;
-                }
-
-                await _packages.HardDeletePackageAsync(package.Id, package.Version, cancellationToken);
-                await _storage.DeleteAsync(package.Id, package.Version, cancellationToken);
-            }
+                return PackageIndexingResult.PackageAlreadyExists;
 
             // TODO: Add more package validations
             // TODO: Call PackageArchiveReader.ValidatePackageEntriesAsync
