@@ -50,19 +50,6 @@ namespace BaGet.Azure
             return PackageAddResult.Success;
         }
 
-        public async Task<bool> ExistsAsync(string id, CancellationToken cancellationToken)
-        {
-            var filter = TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, id.ToLowerInvariant());
-            var query = new TableQuery<PackageEntity>()
-                .Select(MinimalColumnSet)
-                .Where(filter)
-                .Take(1);
-
-            var result = await _table.ExecuteQuerySegmentedAsync(query, token: null, cancellationToken);
-
-            return result.Results.Any();
-        }
-
         public async Task<bool> ExistsAsync(
             string id,
             NuGetVersion version,

@@ -46,14 +46,6 @@ namespace BaGet.Core
         /// Determine whether a package exists in the database (even if the package is unlisted).
         /// </summary>
         /// <param name="id">The package id to search.</param>
-        /// <param name="cancellationToken">A token to cancel the task.</param>
-        /// <returns>Whether the package exists in the database.</returns>
-        Task<bool> ExistsAsync(string id, CancellationToken cancellationToken);
-
-        /// <summary>
-        /// Determine whether a package exists in the database (even if the package is unlisted).
-        /// </summary>
-        /// <param name="id">The package id to search.</param>
         /// <param name="version">The package version to search.</param>
         /// <param name="cancellationToken">A token to cancel the task.</param>
         /// <returns>Whether the package exists in the database.</returns>
