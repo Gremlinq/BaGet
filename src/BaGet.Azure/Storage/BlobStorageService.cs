@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,22 +23,6 @@ namespace BaGet.Azure
             return await _container
                 .GetBlockBlobReference(path)
                 .OpenReadAsync(cancellationToken);
-        }
-
-        public Task<Uri> GetDownloadUriAsync(string path, CancellationToken cancellationToken)
-        {
-            // TODO: Make expiry time configurable.
-            var blob = _container.GetBlockBlobReference(path);
-            var accessPolicy = new SharedAccessBlobPolicy
-            {
-                SharedAccessExpiryTime = DateTimeOffset.Now.Add(TimeSpan.FromMinutes(10)),
-                Permissions = SharedAccessBlobPermissions.Read
-            };
-
-            var signature = blob.GetSharedAccessSignature(accessPolicy);
-            var result = new Uri(blob.Uri, signature);
-
-            return Task.FromResult(result);
         }
 
         public async Task<StoragePutResult> PutAsync(
