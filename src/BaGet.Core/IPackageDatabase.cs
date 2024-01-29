@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using NuGet.Versioning;
@@ -76,15 +76,6 @@ namespace BaGet.Core
         /// <param name="cancellationToken">A token to cancel the task.</param>
         /// <returns>False if the package does not exist.</returns>
         Task<bool> RelistPackageAsync(string id, NuGetVersion version, CancellationToken cancellationToken);
-
-        /// <summary>
-        /// Increment a package's download count.
-        /// </summary>
-        /// <param name="id">The id of the package to update.</param>
-        /// <param name="version">The id of the package to update.</param>
-        /// <param name="cancellationToken">A token to cancel the task.</param>
-        /// <returns>Task that completes when the package's download has been incremented.</returns>
-        Task AddDownloadAsync(string id, NuGetVersion version, CancellationToken cancellationToken);
 
         /// <summary>
         /// Completely remove the package from the database.

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -48,46 +48,6 @@ namespace BaGet.Azure
             }
 
             return PackageAddResult.Success;
-        }
-
-        public async Task AddDownloadAsync(
-            string id,
-            NuGetVersion version,
-            CancellationToken cancellationToken)
-        {
-            var attempt = 0;
-
-            while (true)
-            {
-                try
-                {
-                    var operation = TableOperation.Retrieve<PackageDownloadsEntity>(
-                        id.ToLowerInvariant(),
-                        version.ToNormalizedString().ToLowerInvariant());
-
-                    var result = await _table.ExecuteAsync(operation, cancellationToken);
-                    var entity = result.Result as PackageDownloadsEntity;
-
-                    if (entity == null)
-                    {
-                        return;
-                    }
-
-                    entity.Downloads += 1;
-
-                    await _table.ExecuteAsync(TableOperation.Merge(entity), cancellationToken);
-                    return;
-                }
-                catch (StorageException e)
-                    when (attempt < MaxPreconditionFailures && e.IsPreconditionFailedException())
-                {
-                    attempt++;
-                    _logger.LogWarning(
-                        e,
-                        $"Retrying due to precondition failure, attempt {{Attempt}} of {MaxPreconditionFailures}..",
-                        attempt);
-                }
-            }
         }
 
         public async Task<bool> ExistsAsync(string id, CancellationToken cancellationToken)

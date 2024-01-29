@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -47,11 +47,6 @@ namespace BaGet.Core
         public async Task<bool> ExistsAsync(string id, NuGetVersion version, CancellationToken cancellationToken)
         {
             return await MirrorAsync(id, version, cancellationToken);
-        }
-
-        public async Task AddDownloadAsync(string packageId, NuGetVersion version, CancellationToken cancellationToken)
-        {
-            await _db.AddDownloadAsync(packageId, version, cancellationToken);
         }
 
         /// <summary>

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -53,7 +53,6 @@ namespace BaGet.Core
                 return null;
             }
 
-            await _packages.AddDownloadAsync(id, version, cancellationToken);
             return await _storage.GetPackageStreamAsync(id, version, cancellationToken);
         }
 

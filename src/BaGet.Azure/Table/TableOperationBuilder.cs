@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using BaGet.Core;
@@ -52,19 +52,6 @@ namespace BaGet.Azure
             };
 
             return TableOperation.Insert(entity);
-        }
-
-        public TableOperation UpdateDownloads(string packageId, NuGetVersion packageVersion, long downloads)
-        {
-            var entity = new PackageDownloadsEntity
-            {
-                PartitionKey = packageId.ToLowerInvariant(),
-                RowKey = packageVersion.ToNormalizedString().ToLowerInvariant(),
-                Downloads = downloads,
-                ETag = "*"
-            };
-
-            return TableOperation.Merge(entity);
         }
 
         public TableOperation HardDeletePackage(string packageId, NuGetVersion packageVersion)
