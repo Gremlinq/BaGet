@@ -9,11 +9,6 @@
         public string ApiKey { get; set; }
 
         /// <summary>
-        /// How BaGet should interpret package deletion requests.
-        /// </summary>
-        public PackageDeletionBehavior PackageDeletionBehavior { get; set; } = PackageDeletionBehavior.Unlist;
-
-        /// <summary>
         /// If true, disables package pushing, deleting, and re-listing.
         /// </summary>
         public bool IsReadOnlyMode { get; set; } = false;
