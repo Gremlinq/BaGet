@@ -1,6 +1,7 @@
-using System;
+﻿using System;
 using BaGet.Core;
-using Microsoft.Azure.Cosmos.Table;
+using Azure.Data.Tables;
+using Azure;
 
 namespace BaGet.Azure
 {
@@ -9,7 +10,7 @@ namespace BaGet.Azure
     /// The <see cref="TableEntity.PartitionKey"/> is the <see cref="Package.Id"/> and
     /// the <see cref="TableEntity.RowKey"/> is the <see cref="Package.Version"/>.
     /// </summary>
-    public class PackageEntity : TableEntity, IDownloadCount, IListed
+    public class PackageEntity : ITableEntity, IDownloadCount, IListed
     {
         public string Identifier { get; set; }
         public string NormalizedVersion { get; set; }
@@ -41,6 +42,12 @@ namespace BaGet.Azure
         public string Dependencies { get; set; }
         public string PackageTypes { get; set; }
         public string TargetFrameworks { get; set; }
+
+
+        public string PartitionKey { get; set; }
+        public string RowKey { get; set; }
+        public DateTimeOffset? Timestamp { get; set; }
+        public ETag ETag { get; set; }
     }
 
     /// <summary>
@@ -67,9 +74,13 @@ namespace BaGet.Azure
     /// The <see cref="TableEntity.PartitionKey"/> is the <see cref="Package.Id"/> and
     /// the <see cref="TableEntity.RowKey"/> is the <see cref="Package.Version"/>.
     /// </summary>
-    public class PackageListingEntity : TableEntity, IListed
+    public class PackageListingEntity : ITableEntity, IListed
     {
         public bool Listed { get; set; }
+        public string PartitionKey { get; set; }
+        public string RowKey { get; set; }
+        public DateTimeOffset? Timestamp { get; set; }
+        public ETag ETag { get; set; }
     }
 
     /// <summary>
@@ -77,9 +88,14 @@ namespace BaGet.Azure
     /// The <see cref="TableEntity.PartitionKey"/> is the <see cref="Package.Id"/> and
     /// the <see cref="TableEntity.RowKey"/> is the <see cref="Package.Version"/>.
     /// </summary>
-    public class PackageDownloadsEntity : TableEntity, IDownloadCount
+    public class PackageDownloadsEntity : ITableEntity, IDownloadCount
     {
         public long Downloads { get; set; }
+
+        public string PartitionKey { get; set ; }
+        public string RowKey { get; set; }
+        public DateTimeOffset? Timestamp { get; set; }
+        public ETag ETag { get; set; }
     }
 
     internal interface IListed

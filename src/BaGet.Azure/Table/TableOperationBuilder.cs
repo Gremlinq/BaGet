@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using BaGet.Core;
-using Microsoft.Azure.Cosmos.Table;
+using Azure.Data.Tables;
 using Newtonsoft.Json;
 using NuGet.Versioning;
 
@@ -10,7 +10,7 @@ namespace BaGet.Azure
 {
     public class TableOperationBuilder
     {
-        public TableOperation AddPackage(Package package)
+        public PackageEntity AddPackage(Package package)
         {
             if (package == null) throw new ArgumentNullException(nameof(package));
 
@@ -51,7 +51,7 @@ namespace BaGet.Azure
                 TargetFrameworks = SerializeList(package.TargetFrameworks, f => f.Moniker)
             };
 
-            return TableOperation.Insert(entity);
+            return entity;
         }
 
         private static string SerializeList<TIn, TOut>(IReadOnlyList<TIn> objects, Func<TIn, TOut> map)

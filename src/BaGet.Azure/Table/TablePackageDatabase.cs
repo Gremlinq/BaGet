@@ -4,10 +4,10 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using BaGet.Core;
-using Microsoft.Azure.Cosmos.Table;
-using Microsoft.Extensions.Logging;
+using Azure.Data.Tables;
 using Microsoft.Extensions.Options;
 using NuGet.Versioning;
+using Azure;
 
 namespace BaGet.Azure
 {
@@ -16,33 +16,29 @@ namespace BaGet.Azure
     /// </summary>
     public class TablePackageDatabase : IPackageDatabase
     {
-        private const int MaxPreconditionFailures = 5;
         private static List<string> MinimalColumnSet => new List<string> { "PartitionKey" };
 
+        private readonly TableClient _tableClient;
         private readonly TableOperationBuilder _operationBuilder;
-        private readonly CloudTable _table;
-        private readonly ILogger<TablePackageDatabase> _logger;
 
         public TablePackageDatabase(
             TableOperationBuilder operationBuilder,
-            CloudTableClient client,
-            IOptionsSnapshot<AzureTableOptions> options,
-            ILogger<TablePackageDatabase> logger)
+            TableServiceClient client,
+            IOptionsSnapshot<AzureTableOptions> options)
         {
             _operationBuilder = operationBuilder ?? throw new ArgumentNullException(nameof(operationBuilder));
-            _table = client?.GetTableReference(options.Value.TableName) ?? throw new ArgumentNullException(nameof(client));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _tableClient = client?.GetTableClient(options.Value.TableName) ?? throw new ArgumentNullException(nameof(client));
         }
 
         public async Task<PackageAddResult> AddAsync(Package package, CancellationToken cancellationToken)
         {
             try
             {
-                var operation = _operationBuilder.AddPackage(package);
+                var packageEntity = _operationBuilder.AddPackage(package);
 
-                await _table.ExecuteAsync(operation, cancellationToken);
+                await _tableClient.AddEntityAsync(packageEntity, cancellationToken);
             }
-            catch (StorageException e) when (e.IsAlreadyExistsException())
+            catch (RequestFailedException e) when (e.IsAlreadyExistsException())
             {
                 return PackageAddResult.PackageAlreadyExists;
             }
@@ -55,46 +51,28 @@ namespace BaGet.Azure
             NuGetVersion version,
             CancellationToken cancellationToken)
         {
-            var operation = TableOperation.Retrieve<PackageEntity>(
-                id.ToLowerInvariant(),
-                version.ToNormalizedString().ToLowerInvariant(),
-                MinimalColumnSet);
+            var execution = await _tableClient.GetEntityIfExistsAsync<PackageEntity>(id.ToLowerInvariant(), version.ToNormalizedString().ToLowerInvariant(), MinimalColumnSet, cancellationToken);
 
-            var execution = await _table.ExecuteAsync(operation, cancellationToken);
-
-            return execution.Result is PackageEntity;
+            return execution.HasValue;
         }
 
         public async Task<IReadOnlyList<Package>> FindAsync(string id, bool includeUnlisted, CancellationToken cancellationToken)
         {
-            var filter = TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, id.ToLowerInvariant());
+            var filter = TableClient.CreateQueryFilter<PackageEntity>(x => x.PartitionKey == id.ToLowerInvariant());
+
             if (!includeUnlisted)
             {
-                filter = TableQuery.CombineFilters(
-                    filter,
-                    TableOperators.And,
-                    TableQuery.GenerateFilterConditionForBool(nameof(PackageEntity.Listed), QueryComparisons.Equal, true));
+                filter = TableClient.CreateQueryFilter($"({filter} and ({TableClient.CreateQueryFilter<PackageEntity>(x => x.Listed == true)})");
             }
 
-            var query = new TableQuery<PackageEntity>().Where(filter);
-            var results = new List<Package>();
+            var results = await _tableClient
+                .QueryAsync<PackageEntity>(filter, cancellationToken: cancellationToken)
+                .ToArrayAsync(cancellationToken);
 
-            // Request 500 results at a time from the server.
-            TableContinuationToken token = null;
-            query.TakeCount = 500;
-
-            do
-            {
-                var segment = await _table.ExecuteQuerySegmentedAsync(query, token, cancellationToken);
-
-                token = segment.ContinuationToken;
-
-                // Write out the properties for each entity returned.
-                results.AddRange(segment.Results.Select(r => r.AsPackage()));
-            }
-            while (token != null);
-
-            return results.OrderBy(p => p.Version).ToList();
+            return results
+                .Select(x => x.AsPackage())
+                .OrderBy(p => p.Version)
+                .ToList();
         }
 
         public async Task<Package> FindOrNullAsync(
@@ -103,25 +81,18 @@ namespace BaGet.Azure
             bool includeUnlisted,
             CancellationToken cancellationToken)
         {
-            var operation = TableOperation.Retrieve<PackageEntity>(
+            var maybeEntity = await _tableClient.GetEntityIfExistsAsync<PackageEntity>(
                 id.ToLowerInvariant(),
                 version.ToNormalizedString().ToLowerInvariant());
 
-            var result = await _table.ExecuteAsync(operation, cancellationToken);
-            var entity = result.Result as PackageEntity;
-
-            if (entity == null)
-            {
+            if (!maybeEntity.HasValue)
                 return null;
-            }
 
             // Filter out the package if it's unlisted.
-            if (!includeUnlisted && !entity.Listed)
-            {
+            if (!includeUnlisted && !maybeEntity.Value.Listed)
                 return null;
-            }
 
-            return entity.AsPackage();
+            return maybeEntity.Value.AsPackage();
         }
     }
 }

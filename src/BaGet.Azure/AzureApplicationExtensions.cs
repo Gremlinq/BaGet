@@ -1,12 +1,10 @@
 ﻿using BaGet.Azure;
 using BaGet.Core;
-using Microsoft.Azure.Cosmos.Table;
+using Azure.Data.Tables;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
-using Microsoft.Azure.Storage.Blob;
-using CloudStorageAccount = Microsoft.Azure.Storage.CloudStorageAccount;
-using TableStorageAccount = Microsoft.Azure.Cosmos.Table.CloudStorageAccount;
+using Azure.Storage.Blobs;
 
 namespace BaGet
 {
@@ -20,18 +18,11 @@ namespace BaGet
             app.Services.AddTransient<TableOperationBuilder>();
             app.Services.AddTransient<ISearchService, TableSearchService>();
 
-            app.Services.AddSingleton(provider =>
+            app.Services.AddTransient(provider =>
             {
                 var options = provider.GetRequiredService<IOptions<AzureTableOptions>>().Value;
 
-                return TableStorageAccount.Parse(options.ConnectionString);
-            });
-
-            app.Services.AddTransient(provider =>
-            {
-                var account = provider.GetRequiredService<TableStorageAccount>();
-
-                return account.CreateCloudTableClient();
+                return new TableServiceClient(options.ConnectionString);
             });
 
             return app;
@@ -43,21 +34,13 @@ namespace BaGet
             app.Services.AddTransient<IStorageService, BlobStorageService>();
             app.Services.TryAddTransient<IStorageService>(provider => provider.GetRequiredService<BlobStorageService>());
 
-            app.Services.AddSingleton(provider =>
-            {
-                var options = provider.GetRequiredService<IOptions<AzureBlobStorageOptions>>().Value;
-
-                return CloudStorageAccount.Parse(options.ConnectionString);
-            });
-
             app.Services.AddTransient(provider =>
             {
                 var options = provider.GetRequiredService<IOptionsSnapshot<AzureBlobStorageOptions>>().Value;
-                var account = provider.GetRequiredService<CloudStorageAccount>();
 
-                var client = account.CreateCloudBlobClient();
+                var client = new BlobServiceClient(options.ConnectionString);
 
-                return client.GetContainerReference(options.Container);
+                return client.GetBlobContainerClient(options.Container);
             });
 
             return app;
