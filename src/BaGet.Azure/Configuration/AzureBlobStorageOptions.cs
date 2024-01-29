@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace BaGet.Azure
@@ -16,16 +16,6 @@ namespace BaGet.Azure
         public string ConnectionString { get; set; }
 
         /// <summary>
-        /// The Azure Blob Storage account name. Ignored if <see cref="ConnectionString"/> is provided.
-        /// </summary>
-        public string AccountName { get; set; }
-
-        /// <summary>
-        /// The Azure Blob Storage access key. Ignored if <see cref="ConnectionString"/> is provided.
-        /// </summary>        
-        public string AccessKey { get; set; }
-
-        /// <summary>
         /// The Azure Blob Storage container name.
         /// </summary>
         public string Container { get; set; }
@@ -36,19 +26,10 @@ namespace BaGet.Azure
 
             if (string.IsNullOrEmpty(ConnectionString))
             {
-                if (string.IsNullOrEmpty(AccountName))
-                {
-                    yield return new ValidationResult(
-                        $"The {nameof(AccountName)} configuration is required. See {helpUrl}",
-                        new[] { nameof(AccountName) });
-                }
+                yield return new ValidationResult(
+                    $"The {nameof(ConnectionString)} configuration is required. See {helpUrl}",
+                    new[] { nameof(ConnectionString) });
 
-                if (string.IsNullOrEmpty(AccessKey))
-                {
-                    yield return new ValidationResult(
-                        $"The {nameof(AccessKey)} configuration is required. See {helpUrl}",
-                        new[] { nameof(AccessKey) });
-                }
             }
 
             if (string.IsNullOrEmpty(Container))

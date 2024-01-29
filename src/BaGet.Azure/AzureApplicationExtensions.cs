@@ -1,4 +1,4 @@
-using BaGet.Azure;
+﻿using BaGet.Azure;
 using BaGet.Core;
 using Microsoft.Azure.Cosmos.Table;
 using Microsoft.Extensions.DependencyInjection;
@@ -6,7 +6,6 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using Microsoft.Azure.Storage.Blob;
 using CloudStorageAccount = Microsoft.Azure.Storage.CloudStorageAccount;
-using StorageCredentials = Microsoft.Azure.Storage.Auth.StorageCredentials;
 using TableStorageAccount = Microsoft.Azure.Cosmos.Table.CloudStorageAccount;
 
 namespace BaGet
@@ -48,16 +47,7 @@ namespace BaGet
             {
                 var options = provider.GetRequiredService<IOptions<AzureBlobStorageOptions>>().Value;
 
-                if (!string.IsNullOrEmpty(options.ConnectionString))
-                {
-                    return CloudStorageAccount.Parse(options.ConnectionString);
-                }
-
-                return new CloudStorageAccount(
-                    new StorageCredentials(
-                        options.AccountName,
-                        options.AccessKey),
-                    useHttps: true);
+                return CloudStorageAccount.Parse(options.ConnectionString);
             });
 
             app.Services.AddTransient(provider =>
