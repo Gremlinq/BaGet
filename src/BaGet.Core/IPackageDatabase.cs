@@ -58,15 +58,6 @@ namespace BaGet.Core
         /// <param name="cancellationToken">A token to cancel the task.</param>
         /// <returns>Whether the package exists in the database.</returns>
         Task<bool> ExistsAsync(string id, NuGetVersion version, CancellationToken cancellationToken);
-
-        /// <summary>
-        /// Relist a package, making it discoverable.
-        /// </summary>
-        /// <param name="id">The id of the package to relist.</param>
-        /// <param name="version">The version of the package to relist.</param>
-        /// <param name="cancellationToken">A token to cancel the task.</param>
-        /// <returns>False if the package does not exist.</returns>
-        Task<bool> RelistPackageAsync(string id, NuGetVersion version, CancellationToken cancellationToken);
     }
 
     /// <summary>

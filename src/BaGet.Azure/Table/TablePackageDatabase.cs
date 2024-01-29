@@ -136,26 +136,5 @@ namespace BaGet.Azure
 
             return entity.AsPackage();
         }
-
-        public async Task<bool> RelistPackageAsync(string id, NuGetVersion version, CancellationToken cancellationToken)
-        {
-            return await TryUpdatePackageAsync(
-                _operationBuilder.RelistPackage(id, version),
-                cancellationToken);
-        }
-
-        private async Task<bool> TryUpdatePackageAsync(TableOperation operation, CancellationToken cancellationToken)
-        {
-            try
-            {
-                await _table.ExecuteAsync(operation, cancellationToken);
-            }
-            catch (StorageException e) when (e.IsNotFoundException())
-            {
-                return false;
-            }
-
-            return true;
-        }
     }
 }

@@ -54,19 +54,6 @@ namespace BaGet.Azure
             return TableOperation.Insert(entity);
         }
 
-        public TableOperation RelistPackage(string packageId, NuGetVersion packageVersion)
-        {
-            var entity = new PackageListingEntity
-            {
-                PartitionKey = packageId.ToLowerInvariant(),
-                RowKey = packageVersion.ToNormalizedString().ToLowerInvariant(),
-                Listed = true,
-                ETag = "*"
-            };
-
-            return TableOperation.Merge(entity);
-        }
-
         private static string SerializeList<TIn, TOut>(IReadOnlyList<TIn> objects, Func<TIn, TOut> map)
         {
             var data = objects.Select(map).ToList();

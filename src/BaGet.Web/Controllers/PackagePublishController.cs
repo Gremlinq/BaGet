@@ -86,29 +86,7 @@ namespace BaGet.Web
         [HttpPost]
         public async Task<IActionResult> Relist(string id, string version, CancellationToken cancellationToken)
         {
-            if (_options.Value.IsReadOnlyMode)
-            {
-                return Unauthorized();
-            }
-
-            if (!NuGetVersion.TryParse(version, out var nugetVersion))
-            {
-                return NotFound();
-            }
-
-            if (!await _authentication.AuthenticateAsync(Request.GetApiKey(), cancellationToken))
-            {
-                return Unauthorized();
-            }
-
-            if (await _packages.RelistPackageAsync(id, nugetVersion, cancellationToken))
-            {
-                return Ok();
-            }
-            else
-            {
-                return NotFound();
-            }
+            return Unauthorized();
         }
     }
 }
