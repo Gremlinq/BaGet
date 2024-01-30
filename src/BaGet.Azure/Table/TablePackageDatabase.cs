@@ -132,7 +132,8 @@ namespace BaGet.Azure
         {
             var maybeEntity = await _tableClient.GetEntityIfExistsAsync<PackageEntity>(
                 id.ToLowerInvariant(),
-                version.ToNormalizedString().ToLowerInvariant());
+                version.ToNormalizedString().ToLowerInvariant(),
+                cancellationToken: cancellationToken);
 
             if (!maybeEntity.HasValue)
                 return null;

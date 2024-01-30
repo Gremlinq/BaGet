@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,20 +13,6 @@ namespace BaGet.Core
         public BaGetServiceIndex(IUrlGenerator url)
         {
             _url = url ?? throw new ArgumentNullException(nameof(url));
-        }
-
-        private IEnumerable<ServiceIndexItem> BuildResource(string name, string url, params string[] versions)
-        {
-            foreach (var version in versions)
-            {
-                var type = string.IsNullOrEmpty(version) ? name : $"{name}/{version}";
-
-                yield return new ServiceIndexItem
-                {
-                    ResourceUrl = url,
-                    Type = type,
-                };
-            }
         }
 
         public Task<ServiceIndexResponse> GetAsync(CancellationToken cancellationToken = default)
@@ -47,6 +33,20 @@ namespace BaGet.Core
             };
 
             return Task.FromResult(result);
+        }
+
+        private static IEnumerable<ServiceIndexItem> BuildResource(string name, string url, params string[] versions)
+        {
+            foreach (var version in versions)
+            {
+                var type = string.IsNullOrEmpty(version) ? name : $"{name}/{version}";
+
+                yield return new ServiceIndexItem
+                {
+                    ResourceUrl = url,
+                    Type = type,
+                };
+            }
         }
     }
 }
