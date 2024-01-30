@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -66,13 +65,6 @@ namespace BaGet.Azure
 
                 return StoragePutResult.Conflict;
             }
-        }
-
-        public async Task DeleteAsync(string path, CancellationToken cancellationToken)
-        {
-            await _container
-                .GetBlockBlobClient(path)
-                .DeleteIfExistsAsync(cancellationToken: cancellationToken);
         }
     }
 }

@@ -1,4 +1,4 @@
-using System.IO;
+﻿using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using NuGet.Versioning;
@@ -58,15 +58,5 @@ namespace BaGet.Core
         Task<Stream> GetReadmeStreamAsync(string id, NuGetVersion version, CancellationToken cancellationToken);
 
         Task<Stream> GetIconStreamAsync(string id, NuGetVersion version, CancellationToken cancellationToken);
-
-        /// <summary>
-        /// Remove a package's content from storage. This operation SHOULD succeed
-        /// even if the package does not exist.
-        /// </summary>
-        /// <param name="id">The package's id.</param>
-        /// <param name="version">The package's version.</param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        Task DeleteAsync(string id, NuGetVersion version, CancellationToken cancellationToken);
     }
 }

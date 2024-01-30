@@ -40,14 +40,6 @@ namespace BaGet.Core
             Stream content,
             string contentType,
             CancellationToken cancellationToken = default);
-
-        /// <summary>
-        /// Remove content from storage.
-        /// </summary>
-        /// <param name="path">The path to the content to delete.</param>
-        /// <param name="cancellationToken">A token to cancel the task.</param>
-        /// <returns>A task that completes when the content has been deleted.</returns>
-        Task DeleteAsync(string path, CancellationToken cancellationToken = default);
     }
 
     /// <summary>

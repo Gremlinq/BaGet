@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -158,22 +158,6 @@ namespace BaGet.Core
         public async Task<Stream> GetIconStreamAsync(string id, NuGetVersion version, CancellationToken cancellationToken)
         {
             return await GetStreamAsync(id, version, IconPath, cancellationToken);
-        }
-
-        public async Task DeleteAsync(string id, NuGetVersion version, CancellationToken cancellationToken)
-        {
-            var lowercasedId = id.ToLowerInvariant();
-            var lowercasedNormalizedVersion = version.ToNormalizedString().ToLowerInvariant();
-
-            var packagePath = PackagePath(lowercasedId, lowercasedNormalizedVersion);
-            var nuspecPath = NuspecPath(lowercasedId, lowercasedNormalizedVersion);
-            var readmePath = ReadmePath(lowercasedId, lowercasedNormalizedVersion);
-            var iconPath = IconPath(lowercasedId, lowercasedNormalizedVersion);
-
-            await _storage.DeleteAsync(packagePath, cancellationToken);
-            await _storage.DeleteAsync(nuspecPath, cancellationToken);
-            await _storage.DeleteAsync(readmePath, cancellationToken);
-            await _storage.DeleteAsync(iconPath, cancellationToken);
         }
 
         private async Task<Stream> GetStreamAsync(
