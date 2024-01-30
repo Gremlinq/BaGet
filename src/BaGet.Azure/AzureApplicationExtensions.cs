@@ -15,7 +15,6 @@ namespace BaGet
             app.Services.AddBaGetOptions<AzureTableOptions>("Database");
 
             app.Services.AddTransient<IPackageDatabase, TablePackageDatabase>();
-            app.Services.AddTransient<TableOperationBuilder>();
             app.Services.AddTransient<ISearchService, TableSearchService>();
 
             app.Services.AddTransient(provider =>

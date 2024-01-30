@@ -8,6 +8,7 @@ using Azure.Data.Tables;
 using Microsoft.Extensions.Options;
 using NuGet.Versioning;
 using Azure;
+using Newtonsoft.Json;
 
 namespace BaGet.Azure
 {
@@ -19,14 +20,11 @@ namespace BaGet.Azure
         private static List<string> MinimalColumnSet => new List<string> { "PartitionKey" };
 
         private readonly TableClient _tableClient;
-        private readonly TableOperationBuilder _operationBuilder;
 
         public TablePackageDatabase(
-            TableOperationBuilder operationBuilder,
             TableServiceClient client,
             IOptionsSnapshot<AzureTableOptions> options)
         {
-            _operationBuilder = operationBuilder ?? throw new ArgumentNullException(nameof(operationBuilder));
             _tableClient = client?.GetTableClient(options.Value.TableName) ?? throw new ArgumentNullException(nameof(client));
         }
 
@@ -34,7 +32,42 @@ namespace BaGet.Azure
         {
             try
             {
-                var packageEntity = _operationBuilder.AddPackage(package);
+                var version = package.Version;
+                var normalizedVersion = version.ToNormalizedString();
+
+                var packageEntity = new PackageEntity
+                {
+                    PartitionKey = package.Id.ToLowerInvariant(),
+                    RowKey = normalizedVersion.ToLowerInvariant(),
+
+                    Identifier = package.Id,
+                    NormalizedVersion = normalizedVersion,
+                    OriginalVersion = version.ToFullString(),
+                    Authors = JsonConvert.SerializeObject(package.Authors),
+                    Description = package.Description,
+                    Downloads = package.Downloads,
+                    HasReadme = package.HasReadme,
+                    HasEmbeddedIcon = package.HasEmbeddedIcon,
+                    IsPrerelease = package.IsPrerelease,
+                    Language = package.Language,
+                    Listed = package.Listed,
+                    MinClientVersion = package.MinClientVersion,
+                    Published = package.Published,
+                    RequireLicenseAcceptance = package.RequireLicenseAcceptance,
+                    SemVerLevel = (int)package.SemVerLevel,
+                    Summary = package.Summary,
+                    Title = package.Title,
+                    IconUrl = package.IconUrlString,
+                    LicenseUrl = package.LicenseUrlString,
+                    ReleaseNotes = package.ReleaseNotes,
+                    ProjectUrl = package.ProjectUrlString,
+                    RepositoryUrl = package.RepositoryUrlString,
+                    RepositoryType = package.RepositoryType,
+                    Tags = JsonConvert.SerializeObject(package.Tags),
+                    Dependencies = SerializeList(package.Dependencies, AsDependencyModel),
+                    PackageTypes = SerializeList(package.PackageTypes, AsPackageTypeModel),
+                    TargetFrameworks = SerializeList(package.TargetFrameworks, f => f.Moniker)
+                };
 
                 await _tableClient.AddEntityAsync(packageEntity, cancellationToken);
             }
@@ -93,6 +126,32 @@ namespace BaGet.Azure
                 return null;
 
             return maybeEntity.Value.AsPackage();
+        }
+
+        private static string SerializeList<TIn, TOut>(IReadOnlyList<TIn> objects, Func<TIn, TOut> map)
+        {
+            var data = objects.Select(map).ToList();
+
+            return JsonConvert.SerializeObject(data);
+        }
+
+        private static DependencyModel AsDependencyModel(PackageDependency dependency)
+        {
+            return new DependencyModel
+            {
+                Id = dependency.Id,
+                VersionRange = dependency.VersionRange,
+                TargetFramework = dependency.TargetFramework
+            };
+        }
+
+        private static PackageTypeModel AsPackageTypeModel(PackageType packageType)
+        {
+            return new PackageTypeModel
+            {
+                Name = packageType.Name,
+                Version = packageType.Version
+            };
         }
     }
 }
