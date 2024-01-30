@@ -14,8 +14,9 @@ namespace BaGet.Core
         {
             var app = new BaGetApplication(services);
 
-            services.AddConfiguration();
-            services.AddBaGetServices();
+            services
+                .AddBaGetOptions<BaGetOptions>()
+                .AddBaGetServices();
 
             configureAction(app);
 
@@ -50,11 +51,6 @@ namespace BaGet.Core
             });
 
             return services;
-        }
-
-        private static void AddConfiguration(this IServiceCollection services)
-        {
-            services.AddBaGetOptions<BaGetOptions>();
         }
 
         private static void AddBaGetServices(this IServiceCollection services)

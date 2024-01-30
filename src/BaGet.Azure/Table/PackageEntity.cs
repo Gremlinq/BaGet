@@ -69,35 +69,6 @@ namespace BaGet.Azure
         public string Version { get; set; }
     }
 
-    /// <summary>
-    /// The Azure Table Storage entity to update the <see cref="Package.Listed"/> column.
-    /// The <see cref="TableEntity.PartitionKey"/> is the <see cref="Package.Id"/> and
-    /// the <see cref="TableEntity.RowKey"/> is the <see cref="Package.Version"/>.
-    /// </summary>
-    public class PackageListingEntity : ITableEntity, IListed
-    {
-        public bool Listed { get; set; }
-        public string PartitionKey { get; set; }
-        public string RowKey { get; set; }
-        public DateTimeOffset? Timestamp { get; set; }
-        public ETag ETag { get; set; }
-    }
-
-    /// <summary>
-    /// The Azure Table Storage entity to update the <see cref="Package.Downloads"/> column.
-    /// The <see cref="TableEntity.PartitionKey"/> is the <see cref="Package.Id"/> and
-    /// the <see cref="TableEntity.RowKey"/> is the <see cref="Package.Version"/>.
-    /// </summary>
-    public class PackageDownloadsEntity : ITableEntity, IDownloadCount
-    {
-        public long Downloads { get; set; }
-
-        public string PartitionKey { get; set ; }
-        public string RowKey { get; set; }
-        public DateTimeOffset? Timestamp { get; set; }
-        public ETag ETag { get; set; }
-    }
-
     internal interface IListed
     {
         bool Listed { get; set; }

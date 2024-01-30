@@ -11,7 +11,6 @@ namespace BaGet.Azure
     {
         /// <summary>
         /// The Azure Blob Storage connection string.
-        /// If provided, ignores <see cref="AccountName"/> and <see cref="AccessKey"/>.
         /// </summary>
         public string ConnectionString { get; set; }
 
