@@ -5,7 +5,6 @@ using BaGet.Core;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using NuGet.Versioning;
 
 namespace BaGet.Web
 {
@@ -13,20 +12,17 @@ namespace BaGet.Web
     {
         private readonly IAuthenticationService _authentication;
         private readonly IPackageIndexingService _indexer;
-        private readonly IPackageDatabase _packages;
         private readonly IOptionsSnapshot<BaGetOptions> _options;
         private readonly ILogger<PackagePublishController> _logger;
 
         public PackagePublishController(
             IAuthenticationService authentication,
             IPackageIndexingService indexer,
-            IPackageDatabase packages,
             IOptionsSnapshot<BaGetOptions> options,
             ILogger<PackagePublishController> logger)
         {
             _authentication = authentication ?? throw new ArgumentNullException(nameof(authentication));
             _indexer = indexer ?? throw new ArgumentNullException(nameof(indexer));
-            _packages = packages ?? throw new ArgumentNullException(nameof(packages));
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
