@@ -112,11 +112,7 @@ namespace BaGet.Azure
                 var prefixLower = prefix;
                 var prefixUpper = prefix + "~";
 
-                var partitionLowerFilter = TableClient.CreateQueryFilter<PackageEntity>(x => x.PartitionKey.CompareTo(prefixLower) >= 0);
-
-                var partitionUpperFilter = TableClient.CreateQueryFilter<PackageEntity>(x => x.PartitionKey.CompareTo(prefixUpper) <= 0);
-
-                result = GenerateAnd(partitionLowerFilter, partitionUpperFilter);
+                result = TableClient.CreateQueryFilter<PackageEntity>(x => x.PartitionKey.CompareTo(prefixLower) >= 0 && x.PartitionKey.CompareTo(prefixUpper) <= 0);
             }
 
             // Filter to rows that are listed.
@@ -148,7 +144,7 @@ namespace BaGet.Azure
                 if (string.IsNullOrEmpty(right))
                     return left;
 
-                return TableClient.CreateQueryFilter($"({left}) and ({right})");
+                return $"({left}) and ({right})";
             }
         }
     }
