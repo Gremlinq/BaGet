@@ -64,8 +64,24 @@ namespace BaGet.Azure
                     RepositoryUrl = package.RepositoryUrlString,
                     RepositoryType = package.RepositoryType,
                     Tags = JsonConvert.SerializeObject(package.Tags),
-                    Dependencies = SerializeList(package.Dependencies, AsDependencyModel),
-                    PackageTypes = SerializeList(package.PackageTypes, AsPackageTypeModel),
+                    Dependencies = SerializeList(
+                        package.Dependencies,
+                        dependency =>
+                        {
+                            return new DependencyModel
+                            {
+                                Id = dependency.Id,
+                                VersionRange = dependency.VersionRange,
+                                TargetFramework = dependency.TargetFramework
+                            };
+                        }),
+                    PackageTypes = SerializeList(
+                        package.PackageTypes,
+                        packageType => new PackageTypeModel
+                        {
+                            Name = packageType.Name,
+                            Version = packageType.Version
+                        }),
                     TargetFrameworks = SerializeList(package.TargetFrameworks, f => f.Moniker)
                 };
 
@@ -133,25 +149,6 @@ namespace BaGet.Azure
             var data = objects.Select(map).ToList();
 
             return JsonConvert.SerializeObject(data);
-        }
-
-        private static DependencyModel AsDependencyModel(PackageDependency dependency)
-        {
-            return new DependencyModel
-            {
-                Id = dependency.Id,
-                VersionRange = dependency.VersionRange,
-                TargetFramework = dependency.TargetFramework
-            };
-        }
-
-        private static PackageTypeModel AsPackageTypeModel(PackageType packageType)
-        {
-            return new PackageTypeModel
-            {
-                Name = packageType.Name,
-                Version = packageType.Version
-            };
         }
     }
 }
