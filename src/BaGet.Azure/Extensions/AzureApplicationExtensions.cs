@@ -5,6 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using Azure.Storage.Blobs;
+using System;
+using Azure.Identity;
 
 namespace BaGet
 {
@@ -21,7 +23,7 @@ namespace BaGet
             {
                 var options = provider.GetRequiredService<IOptions<AzureTableOptions>>().Value;
 
-                return new TableServiceClient(options.ConnectionString);
+                return new TableServiceClient(new Uri("https://packagedelivery.table.core.windows.net/"), new DefaultAzureCredential());
             });
 
             return app;
@@ -37,7 +39,7 @@ namespace BaGet
             {
                 var options = provider.GetRequiredService<IOptionsSnapshot<AzureBlobStorageOptions>>().Value;
 
-                var client = new BlobServiceClient(options.ConnectionString);
+                var client = new BlobServiceClient(new Uri("https://packagedelivery.blob.core.windows.net/"), new DefaultAzureCredential());
 
                 return client.GetBlobContainerClient(options.Container);
             });

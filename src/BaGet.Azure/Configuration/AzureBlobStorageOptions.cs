@@ -10,11 +10,6 @@ namespace BaGet.Azure
     public class AzureBlobStorageOptions : IValidatableObject
     {
         /// <summary>
-        /// The Azure Blob Storage connection string.
-        /// </summary>
-        public string ConnectionString { get; set; }
-
-        /// <summary>
         /// The Azure Blob Storage container name.
         /// </summary>
         public string Container { get; set; }
@@ -22,14 +17,6 @@ namespace BaGet.Azure
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             const string helpUrl = "https://loic-sharma.github.io/BaGet/quickstart/azure/#azure-blob-storage";
-
-            if (string.IsNullOrEmpty(ConnectionString))
-            {
-                yield return new ValidationResult(
-                    $"The {nameof(ConnectionString)} configuration is required. See {helpUrl}",
-                    new[] { nameof(ConnectionString) });
-
-            }
 
             if (string.IsNullOrEmpty(Container))
             {
