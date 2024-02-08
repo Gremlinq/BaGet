@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
@@ -21,10 +21,7 @@ namespace BaGet.Core
 
         private bool Authenticate(string apiKey)
         {
-            // No authentication is necessary if there is no required API key.
-            if (_apiKey == null) return true;
-
-            return _apiKey == apiKey;
+            return _apiKey != null && _apiKey.Length > 0 && _apiKey == apiKey;
         }
     }
 }
