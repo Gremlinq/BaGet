@@ -11,6 +11,6 @@
         /// <summary>
         /// If true, disables package pushing, deleting, and re-listing.
         /// </summary>
-        public bool IsReadOnlyMode { get; set; } = false;
+        public ServerMode ServerMode { get; set; } = ServerMode.Read;
     }
 }
