@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using BaGet.Core;
 using BaGet.Protocol.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+
 using NuGet.Versioning;
 
 namespace BaGet.Web
@@ -15,14 +17,19 @@ namespace BaGet.Web
     public class PackageContentController : Controller
     {
         private readonly IPackageContentService _content;
+        private readonly IOptionsSnapshot<BaGetOptions> _options;
 
-        public PackageContentController(IPackageContentService content)
+        public PackageContentController(IPackageContentService content, IOptionsSnapshot<BaGetOptions> options)
         {
             _content = content ?? throw new ArgumentNullException(nameof(content));
+            _options = options;
         }
 
         public async Task<ActionResult<PackageVersionsResponse>> GetPackageVersionsAsync(string id, CancellationToken cancellationToken)
         {
+            if (!_options.Value.ServerMode.HasFlag(ServerMode.Read))
+                return Unauthorized();
+
             var versions = await _content.GetPackageVersionsOrNullAsync(id, cancellationToken);
             if (versions == null)
             {
@@ -34,6 +41,9 @@ namespace BaGet.Web
 
         public async Task<IActionResult> DownloadPackageAsync(string id, string version, CancellationToken cancellationToken)
         {
+            if (!_options.Value.ServerMode.HasFlag(ServerMode.Read))
+                return Unauthorized();
+
             if (!NuGetVersion.TryParse(version, out var nugetVersion))
             {
                 return NotFound();
@@ -50,6 +60,9 @@ namespace BaGet.Web
 
         public async Task<IActionResult> DownloadNuspecAsync(string id, string version, CancellationToken cancellationToken)
         {
+            if (!_options.Value.ServerMode.HasFlag(ServerMode.Read))
+                return Unauthorized();
+
             if (!NuGetVersion.TryParse(version, out var nugetVersion))
             {
                 return NotFound();
@@ -66,6 +79,9 @@ namespace BaGet.Web
 
         public async Task<IActionResult> DownloadReadmeAsync(string id, string version, CancellationToken cancellationToken)
         {
+            if (!_options.Value.ServerMode.HasFlag(ServerMode.Read))
+                return Unauthorized();
+
             if (!NuGetVersion.TryParse(version, out var nugetVersion))
             {
                 return NotFound();
@@ -82,6 +98,9 @@ namespace BaGet.Web
 
         public async Task<IActionResult> DownloadIconAsync(string id, string version, CancellationToken cancellationToken)
         {
+            if (!_options.Value.ServerMode.HasFlag(ServerMode.Read))
+                return Unauthorized();
+
             if (!NuGetVersion.TryParse(version, out var nugetVersion))
             {
                 return NotFound();

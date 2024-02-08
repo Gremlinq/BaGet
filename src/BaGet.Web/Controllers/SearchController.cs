@@ -1,19 +1,22 @@
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
 using BaGet.Core;
 using BaGet.Protocol.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace BaGet.Web
 {
     public class SearchController : Controller
     {
         private readonly ISearchService _searchService;
+        private readonly IOptionsSnapshot<BaGetOptions> _options;
 
-        public SearchController(ISearchService searchService)
+        public SearchController(ISearchService searchService, IOptionsSnapshot<BaGetOptions> options)
         {
             _searchService = searchService ?? throw new ArgumentNullException(nameof(searchService));
+            _options = options;
         }
 
         public async Task<ActionResult<SearchResponse>> SearchAsync(
@@ -28,6 +31,9 @@ namespace BaGet.Web
             [FromQuery]string framework = null,
             CancellationToken cancellationToken = default)
         {
+            if (!_options.Value.ServerMode.HasFlag(ServerMode.Read))
+                return Unauthorized();
+
             var request = new SearchRequest
             {
                 Skip = skip,
@@ -54,6 +60,9 @@ namespace BaGet.Web
             [FromQuery]string packageType = null,
             CancellationToken cancellationToken = default)
         {
+            if (!_options.Value.ServerMode.HasFlag(ServerMode.Read))
+                return Unauthorized();
+
             // If only "id" is provided, find package versions. Otherwise, find package IDs.
             if (versionsQuery != null && autocompleteQuery == null)
             {
@@ -86,6 +95,9 @@ namespace BaGet.Web
             [FromQuery] string packageId = null,
             CancellationToken cancellationToken = default)
         {
+            if (!_options.Value.ServerMode.HasFlag(ServerMode.Read))
+                return Unauthorized();
+
             if (string.IsNullOrWhiteSpace(packageId))
             {
                 return BadRequest();

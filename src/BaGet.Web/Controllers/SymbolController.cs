@@ -31,39 +31,27 @@ namespace BaGet.Web
         }
 
         // See: https://docs.microsoft.com/en-us/nuget/api/package-publish-resource#push-a-package
-        public async Task Upload(CancellationToken cancellationToken)
+        public async Task<IActionResult> Upload(CancellationToken cancellationToken)
         {
             if (!_options.Value.ServerMode.HasFlag(ServerMode.Write) || !await _authentication.AuthenticateAsync(Request.GetApiKey(), cancellationToken))
-            {
-                HttpContext.Response.StatusCode = 401;
-                return;
-            }
+                return Unauthorized();
 
             try
             {
                 using (var uploadStream = await Request.GetUploadStreamOrNullAsync(cancellationToken))
                 {
                     if (uploadStream == null)
-                    {
-                        HttpContext.Response.StatusCode = 400;
-                        return;
-                    }
+                        return StatusCode(400);
 
                     var result = await _indexer.IndexAsync(uploadStream, cancellationToken);
 
                     switch (result)
                     {
                         case SymbolIndexingResult.InvalidSymbolPackage:
-                            HttpContext.Response.StatusCode = 400;
-                            break;
+                            return StatusCode(400);
 
                         case SymbolIndexingResult.PackageNotFound:
-                            HttpContext.Response.StatusCode = 404;
-                            break;
-
-                        case SymbolIndexingResult.Success:
-                            HttpContext.Response.StatusCode = 201;
-                            break;
+                            return StatusCode(404);
                     }
                 }
             }
@@ -71,12 +59,17 @@ namespace BaGet.Web
             {
                 _logger.LogError(e, "Exception thrown during symbol upload");
 
-                HttpContext.Response.StatusCode = 500;
+                return StatusCode(500);
             }
+
+            return StatusCode(201);
         }
 
         public async Task<IActionResult> Get(string file, string key)
         {
+            if (!_options.Value.ServerMode.HasFlag(ServerMode.Read))
+                return Unauthorized();
+
             var pdbStream = await _storage.GetPortablePdbContentStreamOrNullAsync(file, key);
             if (pdbStream == null)
             {
