@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using BaGet.Core;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
@@ -153,10 +153,14 @@ namespace BaGet.Web
         {
             var request = _httpContextAccessor.HttpContext.Request;
 
+            var host = request.Headers["X-Forwarded-Host"].ToString() is { Length: > 0 } forwardedHost
+                ? forwardedHost
+                : request.Host.ToUriComponent();
+
             return string.Concat(
                 request.Scheme,
                 "://",
-                request.Host.ToUriComponent(),
+                host,
                 request.PathBase.ToUriComponent(),
                 "/",
                 relativePath);
