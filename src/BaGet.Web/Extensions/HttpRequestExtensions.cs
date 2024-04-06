@@ -40,5 +40,12 @@ namespace BaGet.Web
         {
             return request.Headers[ApiKeyHeader];
         }
+
+        public static HostString? TryGetForwaredHost(this HttpRequest request)
+        {
+            return request.Headers["X-Forwarded-Host"].ToString() is { Length: > 0 } forwardedHost
+                ? HostString.FromUriComponent(forwardedHost)
+                : null;
+        }
     }
 }
