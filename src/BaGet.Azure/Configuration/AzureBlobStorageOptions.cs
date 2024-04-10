@@ -14,6 +14,8 @@ namespace BaGet.Azure
         /// </summary>
         public string Container { get; set; }
 
+        public string StorageAccountName { get; set; }
+
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             const string helpUrl = "https://loic-sharma.github.io/BaGet/quickstart/azure/#azure-blob-storage";
@@ -23,6 +25,13 @@ namespace BaGet.Azure
                 yield return new ValidationResult(
                     $"The {nameof(Container)} configuration is required. See {helpUrl}",
                     new[] { nameof(Container) });
+            }
+
+            if (string.IsNullOrEmpty(StorageAccountName))
+            {
+                yield return new ValidationResult(
+                    $"The {nameof(StorageAccountName)} configuration is required. See {helpUrl}",
+                    new[] { nameof(StorageAccountName) });
             }
         }
     }
