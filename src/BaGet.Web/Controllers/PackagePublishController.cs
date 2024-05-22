@@ -42,7 +42,7 @@ namespace BaGet.Web
             {
                 if (!await _authentication.AuthenticateAsync(apiKey, cancellationToken))
                 {
-                    _logger.LogWarning($"Authenticating api key {apiKey.Substring(0, 3)}... failed");
+                    _logger.LogWarning($"Authenticating api key failed");
 
                     HttpContext.Response.StatusCode = 401;
                     return;
