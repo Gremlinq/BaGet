@@ -30,46 +30,61 @@ namespace BaGet.Web
         // See: https://docs.microsoft.com/en-us/nuget/api/package-publish-resource#push-a-package
         public async Task Upload(CancellationToken cancellationToken)
         {
-            if (!_options.Value.ServerMode.HasFlag(ServerMode.Write) || !await _authentication.AuthenticateAsync(Request.GetApiKey(), cancellationToken))
+            if (!_options.Value.ServerMode.HasFlag(ServerMode.Write))
             {
+                _logger.LogWarning("Attempted upload in read-only mode.");
+
                 HttpContext.Response.StatusCode = 401;
                 return;
             }
 
-            try
+            if (Request.GetApiKey() is { Length: > 30 } apiKey)
             {
-                using (var uploadStream = await Request.GetUploadStreamOrNullAsync(cancellationToken))
+                if (!await _authentication.AuthenticateAsync(apiKey, cancellationToken))
                 {
-                    if (uploadStream == null)
-                    {
-                        HttpContext.Response.StatusCode = 400;
-                        return;
-                    }
+                    _logger.LogWarning($"Authenticating api key {apiKey.Substring(0, 3)}... failed");
 
-                    var result = await _indexer.IndexAsync(uploadStream, cancellationToken);
+                    HttpContext.Response.StatusCode = 401;
+                    return;
+                }
 
-                    switch (result)
+                try
+                {
+                    using (var uploadStream = await Request.GetUploadStreamOrNullAsync(cancellationToken))
                     {
-                        case PackageIndexingResult.InvalidPackage:
+                        if (uploadStream == null)
+                        {
                             HttpContext.Response.StatusCode = 400;
-                            break;
+                            return;
+                        }
 
-                        case PackageIndexingResult.PackageAlreadyExists:
-                            HttpContext.Response.StatusCode = 409;
-                            break;
+                        var result = await _indexer.IndexAsync(uploadStream, cancellationToken);
 
-                        case PackageIndexingResult.Success:
-                            HttpContext.Response.StatusCode = 201;
-                            break;
+                        switch (result)
+                        {
+                            case PackageIndexingResult.InvalidPackage:
+                                HttpContext.Response.StatusCode = 400;
+                                break;
+
+                            case PackageIndexingResult.PackageAlreadyExists:
+                                HttpContext.Response.StatusCode = 409;
+                                break;
+
+                            case PackageIndexingResult.Success:
+                                HttpContext.Response.StatusCode = 201;
+                                break;
+                        }
                     }
                 }
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Exception thrown during package upload");
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Exception thrown during package upload");
 
-                HttpContext.Response.StatusCode = 500;
+                    HttpContext.Response.StatusCode = 500;
+                }
             }
+            else
+                _logger.LogWarning("No api key for upload provided.");
         }
 
         [HttpDelete]
