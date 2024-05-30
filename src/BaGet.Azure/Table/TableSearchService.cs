@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using BaGet.Core;
 using BaGet.Protocol.Models;
 using Azure.Data.Tables;
-using Microsoft.Extensions.Options;
 
 namespace BaGet.Azure
 {
@@ -15,12 +14,9 @@ namespace BaGet.Azure
         private readonly TableClient _tableClient;
         private readonly ISearchResponseBuilder _responseBuilder;
 
-        public TableSearchService(
-            TableServiceClient client,
-            ISearchResponseBuilder responseBuilder,
-            IOptionsSnapshot<AzureTableOptions> options)
+        public TableSearchService(TableClient tableClient, ISearchResponseBuilder responseBuilder)
         {
-            _tableClient = client?.GetTableClient(options.Value.TableName) ?? throw new ArgumentNullException(nameof(client));
+            _tableClient = tableClient;
             _responseBuilder = responseBuilder ?? throw new ArgumentNullException(nameof(responseBuilder));
         }
 

@@ -23,7 +23,9 @@ namespace BaGet
             {
                 var options = provider.GetRequiredService<IOptions<AzureTableOptions>>().Value;
 
-                return new TableServiceClient(new Uri($"https://{options.StorageAccountName}.table.core.windows.net/"), new DefaultAzureCredential());
+                var client = new TableServiceClient(new Uri($"https://{options.StorageAccountName}.table.core.windows.net/"), new DefaultAzureCredential());
+
+                return client.GetTableClient(options.TableName);
             });
 
             return app;

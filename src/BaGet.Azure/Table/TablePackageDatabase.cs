@@ -5,7 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using BaGet.Core;
 using Azure.Data.Tables;
-using Microsoft.Extensions.Options;
 using NuGet.Versioning;
 using Azure;
 using Newtonsoft.Json;
@@ -21,11 +20,9 @@ namespace BaGet.Azure
 
         private readonly TableClient _tableClient;
 
-        public TablePackageDatabase(
-            TableServiceClient client,
-            IOptionsSnapshot<AzureTableOptions> options)
+        public TablePackageDatabase(TableClient tableClient)
         {
-            _tableClient = client?.GetTableClient(options.Value.TableName) ?? throw new ArgumentNullException(nameof(client));
+            _tableClient = tableClient;
         }
 
         public async Task<PackageAddResult> AddAsync(Package package, CancellationToken cancellationToken)
