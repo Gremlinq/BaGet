@@ -39,7 +39,7 @@
   <PropertyGroup>
     <MicrosoftAspNetCorePackageVersion>7.0.0</MicrosoftAspNetCorePackageVersion>
     <MicrosoftExtensionsPackageVersion>7.0.0</MicrosoftExtensionsPackageVersion>
-    <NuGetPackageVersion>6.8.0</NuGetPackageVersion>
+    <NuGetPackageVersion>6.10.0</NuGetPackageVersion>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(DOTNET_RUNNING_IN_CONTAINER)' == ''">
