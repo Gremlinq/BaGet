@@ -124,26 +124,33 @@ namespace BaGet.Web
             {
                 if (NuGetVersion.TryParse(version, out var nugetVersion))
                 {
-                    using (var packageStream = await _content.GetPackageContentStreamOrNullAsync(id, nugetVersion, cancellationToken))
+                    if (await _content.GetPackageContentStreamOrNullAsync(id, nugetVersion, cancellationToken) is { } packageStream)
                     {
-                        Response.ContentType = "text/plain";
-
-                        var memoryStream = new MemoryStream();
-                        await packageStream.CopyToAsync(memoryStream);
-
-                        memoryStream.Position = 0;
-
-                        using (var packageReader = new PackageArchiveReader(memoryStream))
+                        using (packageStream)
                         {
-                            using (var eulaStream = await packageReader.GetStreamAsync("EULA.txt", cancellationToken))
+                            Response.ContentType = "text/plain";
+
+                            using (var tempPackageStream = new MemoryStream())
                             {
-                                await eulaStream.CopyToAsync(Response.BodyWriter.AsStream());
+                                await packageStream.CopyToAsync(tempPackageStream, cancellationToken);
+
+                                tempPackageStream.Position = 0;
+
+                                using (var packageReader = new PackageArchiveReader(tempPackageStream))
+                                {
+                                    using (var eulaStream = await packageReader.GetStreamAsync("EULA.txt", cancellationToken))
+                                    {
+                                        await eulaStream.CopyToAsync(Response.BodyWriter.AsStream(), cancellationToken);
+
+                                        return;
+                                    }
+                                }
                             }
                         }
                     }
                 }
-                else
-                    Response.StatusCode = (int)HttpStatusCode.NotFound;
+
+                Response.StatusCode = (int)HttpStatusCode.NotFound;
             }
             else
                 Response.StatusCode = (int)HttpStatusCode.Unauthorized;
