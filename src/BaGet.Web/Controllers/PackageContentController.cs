@@ -128,7 +128,7 @@ namespace BaGet.Web
                     {
                         using (packageStream)
                         {
-                            Response.ContentType = "text/plain";
+                            Response.ContentType = "text/plain; charset=utf-8";
 
                             using (var tempPackageStream = new MemoryStream())
                             {
