@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using BaGet.Core;
@@ -6,6 +8,7 @@ using BaGet.Protocol.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
+using NuGet.Packaging;
 using NuGet.Versioning;
 
 namespace BaGet.Web
@@ -113,6 +116,37 @@ namespace BaGet.Web
             }
 
             return File(iconStream, "image/xyz");
+        }
+
+        public async Task DownloadEulaAsync(string id, string version, CancellationToken cancellationToken)
+        {
+            if (_options.Value.ServerMode.HasFlag(ServerMode.Read))
+            {
+                if (NuGetVersion.TryParse(version, out var nugetVersion))
+                {
+                    using (var packageStream = await _content.GetPackageContentStreamOrNullAsync(id, nugetVersion, cancellationToken))
+                    {
+                        Response.ContentType = "text/plain";
+
+                        var memoryStream = new MemoryStream();
+                        await packageStream.CopyToAsync(memoryStream);
+
+                        memoryStream.Position = 0;
+
+                        using (var packageReader = new PackageArchiveReader(memoryStream))
+                        {
+                            using (var eulaStream = await packageReader.GetStreamAsync("EULA.txt", cancellationToken))
+                            {
+                                await eulaStream.CopyToAsync(Response.BodyWriter.AsStream());
+                            }
+                        }
+                    }
+                }
+                else
+                    Response.StatusCode = (int)HttpStatusCode.NotFound;
+            }
+            else
+                Response.StatusCode = (int)HttpStatusCode.Unauthorized;
         }
     }
 }

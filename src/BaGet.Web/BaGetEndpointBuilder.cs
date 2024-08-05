@@ -1,4 +1,4 @@
-using BaGet.Web;
+﻿using BaGet.Web;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Routing.Constraints;
@@ -123,6 +123,11 @@ namespace BaGet
                 name: Routes.PackageDownloadIconRouteName,
                 pattern: "v3/package/{id}/{version}/icon",
                 defaults: new { controller = "PackageContent", action = "DownloadIcon" });
+
+            endpoints.MapControllerRoute(
+                name: Routes.PackageDownloadEulaRouteName,
+                pattern: "v3/package/{id}/{version}/eula",
+                defaults: new { controller = "PackageContent", action = "DownloadEula" });
         }
     }
 }
