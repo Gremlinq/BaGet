@@ -23,7 +23,7 @@ namespace BaGet.Web
             return _linkGenerator.GetUriByRouteValues(
                 _httpContextAccessor.HttpContext,
                 Routes.IndexRouteName,
-                host: _httpContextAccessor.HttpContext.Request.TryGetForwaredHost(),
+                host: _httpContextAccessor.HttpContext.Request.TryGetForwardedHost(),
                 values: null);
         }
 
@@ -42,7 +42,7 @@ namespace BaGet.Web
             return _linkGenerator.GetUriByRouteValues(
                 _httpContextAccessor.HttpContext,
                 Routes.UploadPackageRouteName,
-                host: _httpContextAccessor.HttpContext.Request.TryGetForwaredHost(),
+                host: _httpContextAccessor.HttpContext.Request.TryGetForwardedHost(),
                 values: null);
         }
 
@@ -51,7 +51,7 @@ namespace BaGet.Web
             return _linkGenerator.GetUriByRouteValues(
                 _httpContextAccessor.HttpContext,
                 Routes.UploadSymbolRouteName,
-                host: _httpContextAccessor.HttpContext.Request.TryGetForwaredHost(),
+                host: _httpContextAccessor.HttpContext.Request.TryGetForwardedHost(),
                 values: null);
         }
 
@@ -60,7 +60,7 @@ namespace BaGet.Web
             return _linkGenerator.GetUriByRouteValues(
                 _httpContextAccessor.HttpContext,
                 Routes.SearchRouteName,
-                host: _httpContextAccessor.HttpContext.Request.TryGetForwaredHost(),
+                host: _httpContextAccessor.HttpContext.Request.TryGetForwardedHost(),
                 values: null);
         }
 
@@ -69,7 +69,7 @@ namespace BaGet.Web
             return _linkGenerator.GetUriByRouteValues(
                 _httpContextAccessor.HttpContext,
                 Routes.AutocompleteRouteName,
-                host: _httpContextAccessor.HttpContext.Request.TryGetForwaredHost(),
+                host: _httpContextAccessor.HttpContext.Request.TryGetForwardedHost(),
                 values: null);
         }
 
@@ -78,7 +78,7 @@ namespace BaGet.Web
             return _linkGenerator.GetUriByRouteValues(
                 _httpContextAccessor.HttpContext,
                 Routes.RegistrationIndexRouteName,
-                host: _httpContextAccessor.HttpContext.Request.TryGetForwaredHost(),
+                host: _httpContextAccessor.HttpContext.Request.TryGetForwardedHost(),
                 values: new { Id = id.ToLowerInvariant() });
         }
 
@@ -93,7 +93,7 @@ namespace BaGet.Web
             return _linkGenerator.GetUriByRouteValues(
                 _httpContextAccessor.HttpContext,
                 Routes.RegistrationLeafRouteName,
-                host: _httpContextAccessor.HttpContext.Request.TryGetForwaredHost(),
+                host: _httpContextAccessor.HttpContext.Request.TryGetForwardedHost(),
                 values: new
                 {
                     Id = id.ToLowerInvariant(),
@@ -117,7 +117,7 @@ namespace BaGet.Web
             return _linkGenerator.GetUriByRouteValues(
                 _httpContextAccessor.HttpContext,
                 Routes.PackageDownloadRouteName,
-                host: _httpContextAccessor.HttpContext.Request.TryGetForwaredHost(),
+                host: _httpContextAccessor.HttpContext.Request.TryGetForwardedHost(),
                 values: new
                 {
                     Id = id,
@@ -134,7 +134,7 @@ namespace BaGet.Web
             return _linkGenerator.GetUriByRouteValues(
                 _httpContextAccessor.HttpContext,
                 Routes.PackageDownloadRouteName,
-                host: _httpContextAccessor.HttpContext.Request.TryGetForwaredHost(),
+                host: _httpContextAccessor.HttpContext.Request.TryGetForwardedHost(),
                 values: new
                 {
                     Id = id,
@@ -151,7 +151,7 @@ namespace BaGet.Web
             return _linkGenerator.GetUriByRouteValues(
                 _httpContextAccessor.HttpContext,
                 Routes.PackageDownloadIconRouteName,
-                host: _httpContextAccessor.HttpContext.Request.TryGetForwaredHost(),
+                host: _httpContextAccessor.HttpContext.Request.TryGetForwardedHost(),
                 values: new
                 {
                     Id = id,
@@ -166,7 +166,7 @@ namespace BaGet.Web
             return string.Concat(
                 request.Scheme,
                 "://",
-                (request.TryGetForwaredHost() ?? request.Host).ToUriComponent(),
+                (request.TryGetForwardedHost() ?? request.Host).ToUriComponent(),
                 request.PathBase.ToUriComponent(),
                 "/",
                 relativePath);
