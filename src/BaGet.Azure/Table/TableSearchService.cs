@@ -63,13 +63,6 @@ namespace BaGet.Azure
             return Task.FromResult(response);
         }
 
-        public Task<DependentsResponse> FindDependentsAsync(string packageId, CancellationToken cancellationToken)
-        {
-            var response = _responseBuilder.BuildDependents(new List<PackageDependent>());
-
-            return Task.FromResult(response);
-        }
-
         private async Task<List<PackageRegistration>> SearchAsync(
             string searchText,
             int skip,

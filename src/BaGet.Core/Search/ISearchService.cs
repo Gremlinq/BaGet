@@ -1,4 +1,4 @@
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using BaGet.Protocol.Models;
 
@@ -37,15 +37,5 @@ namespace BaGet.Core
         /// <param name="cancellationToken">A token to cancel the task.</param>
         /// <returns>The package versions that matched the request.</returns>
         Task<AutocompleteResponse> ListPackageVersionsAsync(VersionsRequest request, CancellationToken cancellationToken);
-
-        /// <summary>
-        /// Find the packages that depend on a given package.
-        /// </summary>
-        /// <param name="packageId">The package whose dependents should be found.</param>
-        /// <param name="cancellationToken">A token to cancel the task.</param>
-        /// <returns>The dependents response.</returns>
-        Task<DependentsResponse> FindDependentsAsync(
-            string packageId,
-            CancellationToken cancellationToken);
     }
 }

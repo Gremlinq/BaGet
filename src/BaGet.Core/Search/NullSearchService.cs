@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using BaGet.Protocol.Models;
@@ -20,13 +20,6 @@ namespace BaGet.Core
                 Context = AutocompleteContext.Default
             });
 
-        private static readonly Task<DependentsResponse> EmptyDependentsResponseTask =
-            Task.FromResult(new DependentsResponse
-            {
-                TotalHits = 0,
-                Data = new List<PackageDependent>()
-            });
-
         private static readonly Task<SearchResponse> EmptySearchResponseTask =
             Task.FromResult(new SearchResponse
             {
@@ -46,11 +39,6 @@ namespace BaGet.Core
             CancellationToken cancellationToken)
         {
             return EmptyAutocompleteResponseTask;
-        }
-
-        public Task<DependentsResponse> FindDependentsAsync(string packageId, CancellationToken cancellationToken)
-        {
-            return EmptyDependentsResponseTask;
         }
 
         public Task<SearchResponse> SearchAsync(

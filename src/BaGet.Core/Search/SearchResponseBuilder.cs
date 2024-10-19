@@ -68,14 +68,5 @@ namespace BaGet.Core
                 Context = AutocompleteContext.Default
             };
         }
-
-        public DependentsResponse BuildDependents(IReadOnlyList<PackageDependent> packages)
-        {
-            return new DependentsResponse
-            {
-                TotalHits = packages.Count,
-                Data = packages,
-            };
-        }
     }
 }
