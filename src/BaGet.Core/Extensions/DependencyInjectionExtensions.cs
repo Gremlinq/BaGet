@@ -56,7 +56,6 @@ namespace BaGet.Core
         private static void AddBaGetServices(this IServiceCollection services)
         {
             services.TryAddSingleton<ISearchResponseBuilder, SearchResponseBuilder>();
-            services.TryAddSingleton<ISearchIndexer, NullSearchIndexer>();
             services.TryAddSingleton<ISearchService, NullSearchService>();
             services.TryAddSingleton<RegistrationBuilder>();
             services.TryAddSingleton<SystemTime>();
