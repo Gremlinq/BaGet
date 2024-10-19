@@ -90,20 +90,5 @@ namespace BaGet.Web
                 return await _searchService.AutocompleteAsync(request, cancellationToken);
             }
         }
-
-        public async Task<ActionResult<DependentsResponse>> DependentsAsync(
-            [FromQuery] string packageId = null,
-            CancellationToken cancellationToken = default)
-        {
-            if (!_options.Value.ServerMode.HasFlag(ServerMode.Read))
-                return Unauthorized();
-
-            if (string.IsNullOrWhiteSpace(packageId))
-            {
-                return BadRequest();
-            }
-
-            return await _searchService.FindDependentsAsync(packageId, cancellationToken);
-        }
     }
 }

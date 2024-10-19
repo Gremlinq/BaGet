@@ -56,12 +56,6 @@ namespace BaGet
                 name: Routes.AutocompleteRouteName,
                 pattern: "v3/autocomplete",
                 defaults: new { controller = "Search", action = "Autocomplete" });
-
-            // This is an unofficial API to find packages that depend on a given package.
-            endpoints.MapControllerRoute(
-                name: Routes.DependentsRouteName,
-                pattern: "v3/dependents",
-                defaults: new { controller = "Search", action = "Dependents" });
         }
 
         public void MapPackageMetadataRoutes(IEndpointRouteBuilder endpoints)
