@@ -69,7 +69,6 @@ namespace BaGet.Core
             services.TryAddTransient<IPackageService, PackageService>();
             services.TryAddTransient<IPackageStorageService, PackageStorageService>();
             services.TryAddTransient<IServiceIndexService, BaGetServiceIndex>();
-            services.TryAddTransient<ISymbolIndexingService, SymbolIndexingService>();
             services.TryAddTransient<ISymbolStorageService, SymbolStorageService>();
 
             services.TryAddSingleton<IStorageService, NullStorageService>();
