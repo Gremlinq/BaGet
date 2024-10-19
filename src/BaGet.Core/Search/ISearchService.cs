@@ -21,15 +21,6 @@ namespace BaGet.Core
         Task<SearchResponse> SearchAsync(SearchRequest request, CancellationToken cancellationToken);
 
         /// <summary>
-        /// Perform an autocomplete query.
-        /// See: https://docs.microsoft.com/en-us/nuget/api/search-autocomplete-service-resource#search-for-package-ids
-        /// </summary>
-        /// <param name="request">The autocomplete request.</param>
-        /// <param name="cancellationToken">A token to cancel the task.</param>
-        /// <returns>The autocomplete response.</returns>
-        Task<AutocompleteResponse> AutocompleteAsync(AutocompleteRequest request, CancellationToken cancellationToken);
-
-        /// <summary>
         /// Enumerate listed package versions.
         /// See: https://docs.microsoft.com/en-us/nuget/api/search-autocomplete-service-resource#enumerate-package-versions
         /// </summary>

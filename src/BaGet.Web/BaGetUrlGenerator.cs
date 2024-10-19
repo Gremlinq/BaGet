@@ -55,15 +55,6 @@ namespace BaGet.Web
                 values: null);
         }
 
-        public string GetAutocompleteResourceUrl()
-        {
-            return _linkGenerator.GetUriByRouteValues(
-                _httpContextAccessor.HttpContext,
-                Routes.AutocompleteRouteName,
-                host: _httpContextAccessor.HttpContext.Request.TryGetForwardedHost(),
-                values: null);
-        }
-
         public string GetRegistrationIndexUrl(string id)
         {
             return _linkGenerator.GetUriByRouteValues(

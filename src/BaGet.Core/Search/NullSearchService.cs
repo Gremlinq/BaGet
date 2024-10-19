@@ -27,13 +27,6 @@ namespace BaGet.Core
                 Data = new List<SearchResult>()
             });
 
-        public Task<AutocompleteResponse> AutocompleteAsync(
-            AutocompleteRequest request,
-            CancellationToken cancellationToken)
-        {
-            return EmptyAutocompleteResponseTask;
-        }
-
         public Task<AutocompleteResponse> ListPackageVersionsAsync(
             VersionsRequest request,
             CancellationToken cancellationToken)

@@ -35,23 +35,6 @@ namespace BaGet.Azure
             return _responseBuilder.BuildSearch(results);
         }
 
-        public async Task<AutocompleteResponse> AutocompleteAsync(
-            AutocompleteRequest request,
-            CancellationToken cancellationToken)
-        {
-            var results = await SearchAsync(
-                request.Query,
-                request.Skip,
-                request.Take,
-                request.IncludePrerelease,
-                request.IncludeSemVer2,
-                cancellationToken);
-
-            var packageIds = results.Select(p => p.PackageId).ToList();
-
-            return _responseBuilder.BuildAutocomplete(packageIds);
-        }
-
         public Task<AutocompleteResponse> ListPackageVersionsAsync(
             VersionsRequest request,
             CancellationToken cancellationToken)

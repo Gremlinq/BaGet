@@ -47,48 +47,5 @@ namespace BaGet.Web
 
             return await _searchService.SearchAsync(request, cancellationToken);
         }
-
-        public async Task<ActionResult<AutocompleteResponse>> AutocompleteAsync(
-            [FromQuery(Name = "q")] string autocompleteQuery = null,
-            [FromQuery(Name = "id")] string versionsQuery = null,
-            [FromQuery]bool prerelease = false,
-            [FromQuery]string semVerLevel = null,
-            [FromQuery]int skip = 0,
-            [FromQuery]int take = 20,
-
-            // These are unofficial parameters
-            [FromQuery]string packageType = null,
-            CancellationToken cancellationToken = default)
-        {
-            if (!_options.Value.ServerMode.HasFlag(ServerMode.Read))
-                return Unauthorized();
-
-            // If only "id" is provided, find package versions. Otherwise, find package IDs.
-            if (versionsQuery != null && autocompleteQuery == null)
-            {
-                var request = new VersionsRequest
-                {
-                    IncludePrerelease = prerelease,
-                    IncludeSemVer2 = semVerLevel == "2.0.0",
-                    PackageId = versionsQuery,
-                };
-
-                return await _searchService.ListPackageVersionsAsync(request, cancellationToken);
-            }
-            else
-            {
-                var request = new AutocompleteRequest
-                {
-                    IncludePrerelease = prerelease,
-                    IncludeSemVer2 = semVerLevel == "2.0.0",
-                    PackageType = packageType,
-                    Skip = skip,
-                    Take = take,
-                    Query = autocompleteQuery,
-                };
-
-                return await _searchService.AutocompleteAsync(request, cancellationToken);
-            }
-        }
     }
 }

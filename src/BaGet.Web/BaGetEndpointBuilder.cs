@@ -51,11 +51,6 @@ namespace BaGet
                 name: Routes.SearchRouteName,
                 pattern: "v3/search",
                 defaults: new { controller = "Search", action = "Search" });
-
-            endpoints.MapControllerRoute(
-                name: Routes.AutocompleteRouteName,
-                pattern: "v3/autocomplete",
-                defaults: new { controller = "Search", action = "Autocomplete" });
         }
 
         public void MapPackageMetadataRoutes(IEndpointRouteBuilder endpoints)

@@ -38,12 +38,6 @@ namespace BaGet.Core
         string GetSearchResourceUrl();
 
         /// <summary>
-        /// Get the URL to autocomplete package IDs.
-        /// See: https://docs.microsoft.com/en-us/nuget/api/search-query-service-resource
-        /// </summary>
-        string GetAutocompleteResourceUrl();
-
-        /// <summary>
         /// Get the URL for the entry point of a package's metadata.
         /// See: https://docs.microsoft.com/en-us/nuget/api/registration-base-url-resource#registration-index
         /// </summary>
