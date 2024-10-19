@@ -18,15 +18,6 @@ namespace BaGet.Web
             _linkGenerator = linkGenerator ?? throw new ArgumentNullException(nameof(linkGenerator));
         }
 
-        public string GetServiceIndexUrl()
-        {
-            return _linkGenerator.GetUriByRouteValues(
-                _httpContextAccessor.HttpContext,
-                Routes.IndexRouteName,
-                host: _httpContextAccessor.HttpContext.Request.TryGetForwardedHost(),
-                values: null);
-        }
-
         public string GetPackageContentResourceUrl()
         {
             return AbsoluteUrl("v3/package");
