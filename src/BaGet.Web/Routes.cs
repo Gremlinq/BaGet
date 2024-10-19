@@ -7,8 +7,6 @@
         public const string DeleteRouteName = "delete";
         public const string RelistRouteName = "relist";
         public const string SearchRouteName = "search";
-        public const string AutocompleteRouteName = "autocomplete";
-        public const string DependentsRouteName = "dependents";
         public const string RegistrationIndexRouteName = "registration-index";
         public const string RegistrationLeafRouteName = "registration-leaf";
         public const string PackageVersionsRouteName = "package-versions";
@@ -17,7 +15,5 @@
         public const string PackageDownloadReadmeRouteName = "package-download-readme";
         public const string PackageDownloadIconRouteName = "package-download-icon";
         public const string PackageDownloadEulaRouteName = "package-download-eula";
-        public const string SymbolDownloadRouteName = "symbol-download";
-        public const string PrefixedSymbolDownloadRouteName = "prefixed-symbol-download";
     }
 }
