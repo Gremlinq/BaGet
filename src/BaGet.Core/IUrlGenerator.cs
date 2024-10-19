@@ -47,13 +47,6 @@ namespace BaGet.Core
         string GetRegistrationLeafUrl(string id, NuGetVersion version);
 
         /// <summary>
-        /// Get the URL that lists a package's versions.
-        /// See: https://docs.microsoft.com/en-us/nuget/api/package-base-address-resource#enumerate-package-versions
-        /// </summary>
-        /// <param name="id">The package's ID</param>
-        string GetPackageVersionsUrl(string id);
-
-        /// <summary>
         /// Get the URL to download a package (.nupkg).
         /// See: https://docs.microsoft.com/en-us/nuget/api/package-base-address-resource#download-package-content-nupkg
         /// </summary>
