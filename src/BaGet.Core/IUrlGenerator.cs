@@ -39,15 +39,6 @@ namespace BaGet.Core
         string GetRegistrationIndexUrl(string id);
 
         /// <summary>
-        /// Get the URL for the metadata of several versions of a single package.
-        /// See: https://docs.microsoft.com/en-us/nuget/api/registration-base-url-resource#registration-page
-        /// </summary>
-        /// <param name="id">The package's ID</param>
-        /// <param name="lower">The lowest SemVer 2.0.0 version in the page (inclusive)</param>
-        /// <param name="upper">The highest SemVer 2.0.0 version in the page (inclusive)</param>
-        string GetRegistrationPageUrl(string id, NuGetVersion lower, NuGetVersion upper);
-
-        /// <summary>
         /// Get the URL for the metadata of a specific package ID and version.
         /// See: https://docs.microsoft.com/en-us/nuget/api/registration-base-url-resource#registration-leaf
         /// </summary>
