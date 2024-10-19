@@ -55,13 +55,6 @@ namespace BaGet.Core
         string GetPackageDownloadUrl(string id, NuGetVersion version);
 
         /// <summary>
-        /// Get the URL to download a package's manifest (.nuspec).
-        /// </summary>
-        /// <param name="id">The package's ID</param>
-        /// <param name="version">The package's version</param>
-        string GetPackageManifestDownloadUrl(string id, NuGetVersion version);
-
-        /// <summary>
         /// Get the URL to download a package icon.
         /// </summary>
         /// <param name="id">The package's ID</param>

@@ -99,23 +99,6 @@ namespace BaGet.Web
                 });
         }
 
-        public string GetPackageManifestDownloadUrl(string id, NuGetVersion version)
-        {
-            id = id.ToLowerInvariant();
-            var versionString = version.ToNormalizedString().ToLowerInvariant();
-
-            return _linkGenerator.GetUriByRouteValues(
-                _httpContextAccessor.HttpContext,
-                Routes.PackageDownloadRouteName,
-                host: _httpContextAccessor.HttpContext.Request.TryGetForwardedHost(),
-                values: new
-                {
-                    Id = id,
-                    Version = versionString,
-                    Id2 = id,
-                });
-        }
-
         public string GetPackageIconDownloadUrl(string id, NuGetVersion version)
         {
             id = id.ToLowerInvariant();
