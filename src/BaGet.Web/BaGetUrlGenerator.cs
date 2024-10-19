@@ -46,15 +46,6 @@ namespace BaGet.Web
                 values: null);
         }
 
-        public string GetSymbolPublishResourceUrl()
-        {
-            return _linkGenerator.GetUriByRouteValues(
-                _httpContextAccessor.HttpContext,
-                Routes.UploadSymbolRouteName,
-                host: _httpContextAccessor.HttpContext.Request.TryGetForwardedHost(),
-                values: null);
-        }
-
         public string GetSearchResourceUrl()
         {
             return _linkGenerator.GetUriByRouteValues(

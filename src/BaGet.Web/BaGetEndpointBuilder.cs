@@ -11,7 +11,6 @@ namespace BaGet
         {
             MapServiceIndexRoutes(endpoints);
             MapPackagePublishRoutes(endpoints);
-            MapSymbolRoutes(endpoints);
             MapSearchRoutes(endpoints);
             MapPackageMetadataRoutes(endpoints);
             MapPackageContentRoutes(endpoints);
@@ -44,25 +43,6 @@ namespace BaGet
                 pattern: "api/v2/package/{id}/{version}",
                 defaults: new { controller = "PackagePublish", action = "Relist" },
                 constraints: new { httpMethod = new HttpMethodRouteConstraint("POST") });
-        }
-
-        public void MapSymbolRoutes(IEndpointRouteBuilder endpoints)
-        {
-            endpoints.MapControllerRoute(
-                name: Routes.UploadSymbolRouteName,
-                pattern: "api/v2/symbol",
-                defaults: new { controller = "Symbol", action = "Upload" },
-                constraints: new { httpMethod = new HttpMethodRouteConstraint("PUT") });
-
-            endpoints.MapControllerRoute(
-                name: Routes.SymbolDownloadRouteName,
-                pattern: "api/download/symbols/{file}/{key}/{file2}",
-                defaults: new { controller = "Symbol", action = "Get" });
-
-            endpoints.MapControllerRoute(
-                name: Routes.PrefixedSymbolDownloadRouteName,
-                pattern: "api/download/symbols/{prefix}/{file}/{key}/{file2}",
-                defaults: new { controller = "Symbol", action = "Get" });
         }
 
         public void MapSearchRoutes(IEndpointRouteBuilder endpoints)

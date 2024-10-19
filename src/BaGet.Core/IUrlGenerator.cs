@@ -1,4 +1,4 @@
-using NuGet.Versioning;
+﻿using NuGet.Versioning;
 
 namespace BaGet.Core
 {
@@ -30,12 +30,6 @@ namespace BaGet.Core
         /// See: https://docs.microsoft.com/en-us/nuget/api/package-publish-resource
         /// </summary>
         string GetPackagePublishResourceUrl();
-
-        /// <summary>
-        /// Get the URL to publish symbol packages.
-        /// See: https://docs.microsoft.com/en-us/nuget/api/symbol-package-publish-resource
-        /// </summary>
-        string GetSymbolPublishResourceUrl();
 
         /// <summary>
         /// Get the URL to search for packages.

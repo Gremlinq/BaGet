@@ -4,7 +4,6 @@
     {
         public const string IndexRouteName = "index";
         public const string UploadPackageRouteName = "upload-package";
-        public const string UploadSymbolRouteName = "upload-symbol";
         public const string DeleteRouteName = "delete";
         public const string RelistRouteName = "relist";
         public const string SearchRouteName = "search";
