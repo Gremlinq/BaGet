@@ -120,8 +120,8 @@ namespace BaGet.Web
             var request = _httpContextAccessor.HttpContext.Request;
 
             return string.Concat(
-                request.Scheme,
-                "://",
+                Uri.UriSchemeHttps,
+                Uri.SchemeDelimiter,
                 (request.TryGetForwardedHost() ?? request.Host).ToUriComponent(),
                 request.PathBase.ToUriComponent(),
                 "/",
