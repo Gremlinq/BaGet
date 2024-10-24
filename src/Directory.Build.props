@@ -21,16 +21,6 @@
     <NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
 
-  <!-- Debugging properties -->
-  <PropertyGroup>
-    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
-    <DebugType>portable</DebugType>
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
-    <IncludeSymbols>true</IncludeSymbols>
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-  </PropertyGroup>
-
   <PropertyGroup Condition="'$(CI)' == 'true'">
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
   </PropertyGroup>
@@ -41,10 +31,6 @@
     <MicrosoftExtensionsPackageVersion>7.0.0</MicrosoftExtensionsPackageVersion>
     <NuGetPackageVersion>6.11.1</NuGetPackageVersion>
   </PropertyGroup>
-
-  <ItemGroup Condition="'$(DOTNET_RUNNING_IN_CONTAINER)' == ''">
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All"/>
-  </ItemGroup>
 
   <ItemGroup>
     <None Include="../packageIcon.png" Pack="true" PackagePath="" Visible="false" />
