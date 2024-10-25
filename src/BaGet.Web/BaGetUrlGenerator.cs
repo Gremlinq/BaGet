@@ -33,6 +33,7 @@ namespace BaGet.Web
             return _linkGenerator.GetUriByRouteValues(
                 _httpContextAccessor.HttpContext,
                 Routes.UploadPackageRouteName,
+                scheme: Uri.UriSchemeHttps,
                 host: _httpContextAccessor.HttpContext.Request.TryGetForwardedHost(),
                 values: null);
         }
@@ -42,6 +43,7 @@ namespace BaGet.Web
             return _linkGenerator.GetUriByRouteValues(
                 _httpContextAccessor.HttpContext,
                 Routes.SearchRouteName,
+                scheme: Uri.UriSchemeHttps,
                 host: _httpContextAccessor.HttpContext.Request.TryGetForwardedHost(),
                 values: null);
         }
@@ -51,6 +53,7 @@ namespace BaGet.Web
             return _linkGenerator.GetUriByRouteValues(
                 _httpContextAccessor.HttpContext,
                 Routes.RegistrationIndexRouteName,
+                scheme: Uri.UriSchemeHttps,
                 host: _httpContextAccessor.HttpContext.Request.TryGetForwardedHost(),
                 values: new { Id = id.ToLowerInvariant() });
         }
@@ -66,6 +69,7 @@ namespace BaGet.Web
             return _linkGenerator.GetUriByRouteValues(
                 _httpContextAccessor.HttpContext,
                 Routes.RegistrationLeafRouteName,
+                scheme: Uri.UriSchemeHttps,
                 host: _httpContextAccessor.HttpContext.Request.TryGetForwardedHost(),
                 values: new
                 {
@@ -79,6 +83,7 @@ namespace BaGet.Web
             return _linkGenerator.GetUriByRouteValues(
                 _httpContextAccessor.HttpContext,
                 Routes.PackageVersionsRouteName,
+                scheme: Uri.UriSchemeHttps,
                 values: new { Id = id.ToLowerInvariant() });
         }
 
@@ -90,6 +95,7 @@ namespace BaGet.Web
             return _linkGenerator.GetUriByRouteValues(
                 _httpContextAccessor.HttpContext,
                 Routes.PackageDownloadRouteName,
+                scheme: Uri.UriSchemeHttps,
                 host: _httpContextAccessor.HttpContext.Request.TryGetForwardedHost(),
                 values: new
                 {
@@ -107,6 +113,7 @@ namespace BaGet.Web
             return _linkGenerator.GetUriByRouteValues(
                 _httpContextAccessor.HttpContext,
                 Routes.PackageDownloadIconRouteName,
+                scheme: Uri.UriSchemeHttps,
                 host: _httpContextAccessor.HttpContext.Request.TryGetForwardedHost(),
                 values: new
                 {
