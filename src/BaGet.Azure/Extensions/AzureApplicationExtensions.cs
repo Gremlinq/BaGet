@@ -23,7 +23,7 @@ namespace BaGet
             {
                 var options = provider.GetRequiredService<IOptions<AzureTableOptions>>().Value;
 
-                var client = new TableServiceClient(new Uri($"https://{options.StorageAccountName}.table.core.windows.net/"), new DefaultAzureCredential());
+                var client = new TableServiceClient(new Uri($"https://{options.StorageAccountName}.table.core.windows.net/"), new ManagedIdentityCredential());
 
                 return client.GetTableClient(options.TableName);
             });
@@ -41,7 +41,7 @@ namespace BaGet
             {
                 var options = provider.GetRequiredService<IOptionsSnapshot<AzureBlobStorageOptions>>().Value;
 
-                var client = new BlobServiceClient(new Uri($"https://{options.StorageAccountName}.blob.core.windows.net/"), new DefaultAzureCredential());
+                var client = new BlobServiceClient(new Uri($"https://{options.StorageAccountName}.blob.core.windows.net/"), new ManagedIdentityCredential());
 
                 return client.GetBlobContainerClient(options.Container);
             });
