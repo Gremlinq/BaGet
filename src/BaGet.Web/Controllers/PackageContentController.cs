@@ -31,7 +31,7 @@ namespace BaGet.Web
         public async Task<ActionResult<PackageVersionsResponse>> GetPackageVersionsAsync(string id, CancellationToken cancellationToken)
         {
             if (!_options.Value.ServerMode.HasFlag(ServerMode.Read))
-                return Unauthorized();
+                return Forbid();
 
             return await _content.GetPackageVersionsOrNullAsync(id, cancellationToken) is { } versions
                 ? versions
@@ -41,7 +41,7 @@ namespace BaGet.Web
         public async Task<IActionResult> DownloadPackageAsync(string id, string version, CancellationToken cancellationToken)
         {
             if (!_options.Value.ServerMode.HasFlag(ServerMode.Read))
-                return Unauthorized();
+                return Forbid();
 
             if (!NuGetVersion.TryParse(version, out var nugetVersion))
                 return NotFound();
@@ -54,7 +54,7 @@ namespace BaGet.Web
         public async Task<IActionResult> DownloadNuspecAsync(string id, string version, CancellationToken cancellationToken)
         {
             if (!_options.Value.ServerMode.HasFlag(ServerMode.Read))
-                return Unauthorized();
+                return Forbid();
 
             if (!NuGetVersion.TryParse(version, out var nugetVersion))
                 return NotFound();
@@ -67,7 +67,7 @@ namespace BaGet.Web
         public async Task<IActionResult> DownloadReadmeAsync(string id, string version, CancellationToken cancellationToken)
         {
             if (!_options.Value.ServerMode.HasFlag(ServerMode.Read))
-                return Unauthorized();
+                return Forbid();
 
             if (!NuGetVersion.TryParse(version, out var nugetVersion))
                 return NotFound();
@@ -80,7 +80,7 @@ namespace BaGet.Web
         public async Task<IActionResult> DownloadIconAsync(string id, string version, CancellationToken cancellationToken)
         {
             if (!_options.Value.ServerMode.HasFlag(ServerMode.Read))
-                return Unauthorized();
+                return Forbid();
 
             if (!NuGetVersion.TryParse(version, out var nugetVersion))
                 return NotFound();
