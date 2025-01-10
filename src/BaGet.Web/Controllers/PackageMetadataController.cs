@@ -32,13 +32,9 @@ namespace BaGet.Web
             if (!_options.Value.ServerMode.HasFlag(ServerMode.Read))
                 return Unauthorized();
 
-            var index = await _metadata.GetRegistrationIndexOrNullAsync(id, cancellationToken);
-            if (index == null)
-            {
-                return NotFound();
-            }
-
-            return index;
+            return await _metadata.GetRegistrationIndexOrNullAsync(id, cancellationToken) is { } index
+                ? index
+                : NotFound();
         }
 
         // GET v3/registration/{id}/{version}.json
@@ -49,17 +45,11 @@ namespace BaGet.Web
                 return Unauthorized();
 
             if (!NuGetVersion.TryParse(version, out var nugetVersion))
-            {
                 return NotFound();
-            }
 
-            var leaf = await _metadata.GetRegistrationLeafOrNullAsync(id, nugetVersion, cancellationToken);
-            if (leaf == null)
-            {
-                return NotFound();
-            }
-
-            return leaf;
+            return await _metadata.GetRegistrationLeafOrNullAsync(id, nugetVersion, cancellationToken) is { } leaf
+                ? leaf
+                : NotFound();
         }
     }
 }
