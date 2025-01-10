@@ -29,7 +29,7 @@
   <PropertyGroup>
     <MicrosoftAspNetCorePackageVersion>9.0.0</MicrosoftAspNetCorePackageVersion>
     <MicrosoftExtensionsPackageVersion>9.0.0</MicrosoftExtensionsPackageVersion>
-    <NuGetPackageVersion>6.11.1</NuGetPackageVersion>
+    <NuGetPackageVersion>6.12.1</NuGetPackageVersion>
   </PropertyGroup>
 
   <ItemGroup>
