@@ -27,8 +27,8 @@
 
   <!-- NuGet dependencies shared across projects -->
   <PropertyGroup>
-    <MicrosoftAspNetCorePackageVersion>7.0.0</MicrosoftAspNetCorePackageVersion>
-    <MicrosoftExtensionsPackageVersion>7.0.0</MicrosoftExtensionsPackageVersion>
+    <MicrosoftAspNetCorePackageVersion>9.0.0</MicrosoftAspNetCorePackageVersion>
+    <MicrosoftExtensionsPackageVersion>9.0.0</MicrosoftExtensionsPackageVersion>
     <NuGetPackageVersion>6.11.1</NuGetPackageVersion>
   </PropertyGroup>
 
