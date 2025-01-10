@@ -44,12 +44,10 @@ namespace BaGet.Web
             if (!_options.Value.ServerMode.HasFlag(ServerMode.Read))
                 return Unauthorized();
 
-            if (!NuGetVersion.TryParse(version, out var nugetVersion))
-                return NotFound();
+            if (NuGetVersion.TryParse(version, out var nugetVersion) && await _metadata.GetRegistrationLeafOrNullAsync(id, nugetVersion, cancellationToken) is { } leaf)
+                return leaf;
 
-            return await _metadata.GetRegistrationLeafOrNullAsync(id, nugetVersion, cancellationToken) is { } leaf
-                ? leaf
-                : NotFound();
+            return NotFound();
         }
     }
 }
