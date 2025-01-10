@@ -24,8 +24,8 @@ namespace BaGet.Web
 
         public PackageContentController(IPackageContentService content, IOptionsSnapshot<BaGetOptions> options)
         {
-            _content = content ?? throw new ArgumentNullException(nameof(content));
             _options = options;
+            _content = content ?? throw new ArgumentNullException(nameof(content));
         }
 
         public async Task<ActionResult<PackageVersionsResponse>> GetPackageVersionsAsync(string id, CancellationToken cancellationToken)
@@ -33,13 +33,9 @@ namespace BaGet.Web
             if (!_options.Value.ServerMode.HasFlag(ServerMode.Read))
                 return Unauthorized();
 
-            var versions = await _content.GetPackageVersionsOrNullAsync(id, cancellationToken);
-            if (versions == null)
-            {
-                return NotFound();
-            }
-
-            return versions;
+            return await _content.GetPackageVersionsOrNullAsync(id, cancellationToken) is { } versions
+                ? versions
+                : NotFound();
         }
 
         public async Task<IActionResult> DownloadPackageAsync(string id, string version, CancellationToken cancellationToken)
@@ -48,17 +44,11 @@ namespace BaGet.Web
                 return Unauthorized();
 
             if (!NuGetVersion.TryParse(version, out var nugetVersion))
-            {
                 return NotFound();
-            }
 
-            var packageStream = await _content.GetPackageContentStreamOrNullAsync(id, nugetVersion, cancellationToken);
-            if (packageStream == null)
-            {
-                return NotFound();
-            }
-
-            return File(packageStream, "application/octet-stream");
+            return await _content.GetPackageContentStreamOrNullAsync(id, nugetVersion, cancellationToken) is { } packageStream
+                ? File(packageStream, "application/octet-stream")
+                : NotFound();
         }
 
         public async Task<IActionResult> DownloadNuspecAsync(string id, string version, CancellationToken cancellationToken)
@@ -67,17 +57,11 @@ namespace BaGet.Web
                 return Unauthorized();
 
             if (!NuGetVersion.TryParse(version, out var nugetVersion))
-            {
                 return NotFound();
-            }
 
-            var nuspecStream = await _content.GetPackageManifestStreamOrNullAsync(id, nugetVersion, cancellationToken);
-            if (nuspecStream == null)
-            {
-                return NotFound();
-            }
-
-            return File(nuspecStream, "text/xml");
+            return await _content.GetPackageManifestStreamOrNullAsync(id, nugetVersion, cancellationToken) is { } nuspecStream
+                ? File(nuspecStream, "text/xml")
+                : NotFound();
         }
 
         public async Task<IActionResult> DownloadReadmeAsync(string id, string version, CancellationToken cancellationToken)
@@ -86,17 +70,11 @@ namespace BaGet.Web
                 return Unauthorized();
 
             if (!NuGetVersion.TryParse(version, out var nugetVersion))
-            {
                 return NotFound();
-            }
 
-            var readmeStream = await _content.GetPackageReadmeStreamOrNullAsync(id, nugetVersion, cancellationToken);
-            if (readmeStream == null)
-            {
-                return NotFound();
-            }
-
-            return File(readmeStream, "text/markdown");
+            return await _content.GetPackageReadmeStreamOrNullAsync(id, nugetVersion, cancellationToken) is { } readmeStream
+                ? File(readmeStream, "text/markdown")
+                : NotFound();
         }
 
         public async Task<IActionResult> DownloadIconAsync(string id, string version, CancellationToken cancellationToken)
@@ -105,17 +83,11 @@ namespace BaGet.Web
                 return Unauthorized();
 
             if (!NuGetVersion.TryParse(version, out var nugetVersion))
-            {
                 return NotFound();
-            }
 
-            var iconStream = await _content.GetPackageIconStreamOrNullAsync(id, nugetVersion, cancellationToken);
-            if (iconStream == null)
-            {
-                return NotFound();
-            }
-
-            return File(iconStream, "image/xyz");
+            return await _content.GetPackageIconStreamOrNullAsync(id, nugetVersion, cancellationToken) is { } iconStream
+                ? File(iconStream, "image/xyz")
+                : NotFound();
         }
 
         public async Task DownloadEulaAsync(string id, string version, CancellationToken cancellationToken)
