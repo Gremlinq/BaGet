@@ -43,12 +43,10 @@ namespace BaGet.Web
             if (!_options.Value.ServerMode.HasFlag(ServerMode.Read))
                 return Forbid();
 
-            if (!NuGetVersion.TryParse(version, out var nugetVersion))
-                return NotFound();
+            if (NuGetVersion.TryParse(version, out var nugetVersion) && await _content.GetPackageContentStreamOrNullAsync(id, nugetVersion, cancellationToken) is { } packageStream)
+                return File(packageStream, "application/octet-stream");
 
-            return await _content.GetPackageContentStreamOrNullAsync(id, nugetVersion, cancellationToken) is { } packageStream
-                ? File(packageStream, "application/octet-stream")
-                : NotFound();
+            return NotFound();
         }
 
         public async Task<IActionResult> DownloadNuspecAsync(string id, string version, CancellationToken cancellationToken)
@@ -56,12 +54,10 @@ namespace BaGet.Web
             if (!_options.Value.ServerMode.HasFlag(ServerMode.Read))
                 return Forbid();
 
-            if (!NuGetVersion.TryParse(version, out var nugetVersion))
-                return NotFound();
+            if (NuGetVersion.TryParse(version, out var nugetVersion) && await _content.GetPackageManifestStreamOrNullAsync(id, nugetVersion, cancellationToken) is { } nuspecStream)
+                return File(nuspecStream, "text/xml");
 
-            return await _content.GetPackageManifestStreamOrNullAsync(id, nugetVersion, cancellationToken) is { } nuspecStream
-                ? File(nuspecStream, "text/xml")
-                : NotFound();
+            return NotFound();
         }
 
         public async Task<IActionResult> DownloadReadmeAsync(string id, string version, CancellationToken cancellationToken)
@@ -69,12 +65,10 @@ namespace BaGet.Web
             if (!_options.Value.ServerMode.HasFlag(ServerMode.Read))
                 return Forbid();
 
-            if (!NuGetVersion.TryParse(version, out var nugetVersion))
-                return NotFound();
+            if (NuGetVersion.TryParse(version, out var nugetVersion) && await _content.GetPackageReadmeStreamOrNullAsync(id, nugetVersion, cancellationToken) is { } readmeStream)
+                return File(readmeStream, "text/markdown");
 
-            return await _content.GetPackageReadmeStreamOrNullAsync(id, nugetVersion, cancellationToken) is { } readmeStream
-                ? File(readmeStream, "text/markdown")
-                : NotFound();
+            return NotFound();
         }
 
         public async Task<IActionResult> DownloadIconAsync(string id, string version, CancellationToken cancellationToken)
@@ -82,12 +76,10 @@ namespace BaGet.Web
             if (!_options.Value.ServerMode.HasFlag(ServerMode.Read))
                 return Forbid();
 
-            if (!NuGetVersion.TryParse(version, out var nugetVersion))
-                return NotFound();
+            if (NuGetVersion.TryParse(version, out var nugetVersion) && await _content.GetPackageIconStreamOrNullAsync(id, nugetVersion, cancellationToken) is { } iconStream)
+                return File(iconStream, "image/xyz");
 
-            return await _content.GetPackageIconStreamOrNullAsync(id, nugetVersion, cancellationToken) is { } iconStream
-                ? File(iconStream, "image/xyz")
-                : NotFound();
+            return NotFound();
         }
 
         public async Task DownloadEulaAsync(string id, string version, CancellationToken cancellationToken)
