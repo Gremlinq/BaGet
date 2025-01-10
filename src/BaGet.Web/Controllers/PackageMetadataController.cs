@@ -30,7 +30,7 @@ namespace BaGet.Web
         public async Task<ActionResult<BaGetRegistrationIndexResponse>> RegistrationIndexAsync(string id, CancellationToken cancellationToken)
         {
             if (!_options.Value.ServerMode.HasFlag(ServerMode.Read))
-                return Unauthorized();
+                return Forbid();
 
             return await _metadata.GetRegistrationIndexOrNullAsync(id, cancellationToken) is { } index
                 ? index
@@ -42,7 +42,7 @@ namespace BaGet.Web
         public async Task<ActionResult<RegistrationLeafResponse>> RegistrationLeafAsync(string id, string version, CancellationToken cancellationToken)
         {
             if (!_options.Value.ServerMode.HasFlag(ServerMode.Read))
-                return Unauthorized();
+                return Forbid();
 
             if (NuGetVersion.TryParse(version, out var nugetVersion) && await _metadata.GetRegistrationLeafOrNullAsync(id, nugetVersion, cancellationToken) is { } leaf)
                 return leaf;
